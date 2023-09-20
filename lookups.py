@@ -14,6 +14,8 @@ class ErrorHandling(Enum):
     PREHOOK_CLOSE_CONNECTION_ERROR = "Error closing connection"
     HOOK_DICT_RETURN_ERROR = "Error returning lookup items as dict"
     DB_RETURN_INSERT_INTO_SQL_STMT_ERROR = "Return insert into sql dataframe error:"
+    CSV_ERROR = "Error importing csv files from path"
+    PANDAS_NULLS_ERROR = "Error dropping nulls from df"
 
 class InputTypes(Enum):
     SQL = "SQL"

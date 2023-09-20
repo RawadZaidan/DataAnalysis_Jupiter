@@ -7,7 +7,7 @@ config_dict = {
     "host"      : "localhost",
     "database"  : "dvd",
     "user"      : "postgres",
-    "password"  : "@"
+    "password"  : "Tonystark123@"
 }
 
 def create_connection():
