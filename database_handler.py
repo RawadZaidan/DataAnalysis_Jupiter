@@ -7,10 +7,9 @@ config_dict = {
     "host"      : "localhost",
     "database"  : "dvd",
     "user"      : "postgres",
-    "password"  : "Tonystark123@"
+    "password"  : "@"
 }
 
-#Creating connection with database(db)
 def create_connection():
     db_session = None
     try:
