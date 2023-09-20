@@ -7,9 +7,10 @@ config_dict = {
     "host"      : "localhost",
     "database"  : "dvd",
     "user"      : "postgres",
-    "password"  : "@"
+    "password"  : "Tonystark123@"
 }
 
+#Creating connection with database(db)
 def create_connection():
     db_session = None
     try:
@@ -28,9 +29,9 @@ def return_query(db_session,query):
         cursor.execute(query)
         results = cursor.fetchall()
         db_session.commit()
-    except Exception as hadi:
+    except Exception as e:
         error_string_prefix = ErrorHandling.DB_RETURN_QUERY_ERROR.value
-        error_string_suffix = str(hadi)
+        error_string_suffix = str(e)
         show_error_message(error_string_prefix, error_string_suffix)
     finally:
         return results
