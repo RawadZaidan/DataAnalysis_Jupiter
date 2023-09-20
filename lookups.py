@@ -46,4 +46,9 @@ class ETLStep(Enum):
     HOOK = 1
 
 class DESTINATION_SCHEMA(Enum):
-    DESTINATION_NAME = "dw_reporting"
+    DESTINATION_NAME = "premier_league"
+
+class URL(Enum):
+    DOWNLOAD = " insert donwload link here"
+
+    #URL.DOWNLOAD.value

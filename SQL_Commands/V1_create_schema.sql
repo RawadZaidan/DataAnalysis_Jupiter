@@ -1,1 +1,1 @@
-CREATE SCHEMA IF NOT EXISTS dw_reporting;
+CREATE SCHEMA IF NOT EXISTS premier_league;
