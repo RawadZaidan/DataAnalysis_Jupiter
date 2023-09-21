@@ -72,3 +72,27 @@ def execute_prehook(sql_command_directory_path='./SQL_Commands'):
     finally:
         if db_session:
             close_connection(db_session)
+
+def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
+    try:
+        #Create connection to PG
+        db_session = create_connection()
+
+        #Execute Sql file: New schema 
+        execute_sql_folder(db_session, sql_command_directory_path) 
+
+        #Execute CSV files function (Mahmoud)
+
+        #Create staging tables from CSV
+
+        #Execute Webscraping function (Georges)
+
+        #Create staging tables from CSV
+
+        #Close the connection
+        close_connection(db_session)
+        
+    except Exception as error:
+        suffix = str(error)
+        error_prefix = ErrorHandling.PREHOOK_SQL_ERROR
+        show_error_message(error_prefix.value, suffix)
