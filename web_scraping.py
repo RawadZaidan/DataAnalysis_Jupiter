@@ -56,6 +56,3 @@ def return_match_df_from_web(match_id):
     match_details.append(match_stats)
     match_df = pd.DataFrame(match_details,columns=columns)
     return match_df
-   
-
-
