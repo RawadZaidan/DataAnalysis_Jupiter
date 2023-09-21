@@ -7,7 +7,6 @@ from time import sleep
 from datetime import datetime
 import pandas as pd
 
-
 # def return_match_df_from_web(match_id):
 #     match_details=[]
 #     url = f'https://www.premierleague.com/match/{match_id}'
@@ -56,8 +55,6 @@ import pandas as pd
 #     match_details.append(match_stats)
 #     match_df = pd.DataFrame(match_details,columns=columns)
 #     return match_df
-   
-
 
 def return_match_df_from_web(first_id,last_id):
     match_details=[]
@@ -121,4 +118,3 @@ def return_match_df_from_web(first_id,last_id):
     match_df = pd.DataFrame(match_details,columns=columns)
     driver.quit()
     return match_df
-    #cshs
