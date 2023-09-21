@@ -49,5 +49,5 @@ class DESTINATION_SCHEMA(Enum):
     DESTINATION_NAME = "dw_reporting"
 
 class SEASONS(Enum):
-    S22_23 = [74911,75290]
-    S21_22 = [8888,75290]
+    S22_23 = [74910,74911]
+    S21_22 = [75289,75290]
