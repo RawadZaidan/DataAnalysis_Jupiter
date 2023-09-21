@@ -7,7 +7,6 @@ from time import sleep
 from datetime import datetime
 import pandas as pd
 
-
 def return_match_df_from_web(match_id):
     match_details=[]
     url = f'https://www.premierleague.com/match/{match_id}'
