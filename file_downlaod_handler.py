@@ -1,6 +1,6 @@
 import os
 import requests
-from url_lookups import URLS
+from lookups import URLS
 
 
 def download_files(output_folder):
