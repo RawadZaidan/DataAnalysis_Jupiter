@@ -46,8 +46,17 @@ class ETLStep(Enum):
     HOOK = 1
 
 class DESTINATION_SCHEMA(Enum):
+<<<<<<< HEAD
     DESTINATION_NAME = "dw_reporting"
 
 class SEASONS(Enum):
     S22_23 = [74910,74911]
     S21_22 = [75289,75290]
+=======
+    DESTINATION_NAME = "premier_league"
+
+class URL(Enum):
+    DOWNLOAD = " insert donwload link here"
+
+    #URL.DOWNLOAD.value
+>>>>>>> qhZ9RR6Q
