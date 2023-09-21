@@ -47,3 +47,7 @@ class ETLStep(Enum):
 
 class DESTINATION_SCHEMA(Enum):
     DESTINATION_NAME = "dw_reporting"
+
+class SEASONS(Enum):
+    S22_23 = [74911,75290]
+    S21_22 = [8888,75290]
