@@ -7,6 +7,7 @@ from time import sleep
 from datetime import datetime
 import pandas as pd
 
+<<<<<<< HEAD
 # def return_match_df_from_web(match_id):
 #     match_details=[]
 #     url = f'https://www.premierleague.com/match/{match_id}'
@@ -57,12 +58,16 @@ import pandas as pd
 #     return match_df
 
 def return_match_df_from_web(first_id,last_id):
+=======
+def return_match_df_from_web(match_id):
+>>>>>>> 5c1ff623d798bbe320b2c6722177258d1f9faf6f
     match_details=[]
     url = f'https://www.premierleague.com/match/{match_id}'
     driver = webdriver.Chrome()
     options=Options()
     options.add_argument('--headless')
     driver = webdriver.Chrome(options=options)
+<<<<<<< HEAD
     for match_id in range(first_id,last_id):
         url = f'https://www.premierleague.com/match/{match_id}'
         driver.get(url)
@@ -105,6 +110,20 @@ def return_match_df_from_web(first_id,last_id):
                     home_stats['fouls_conceded'], away_stats['fouls_conceded']]
         match_details.append(match_stats)
     match_df = pd.DataFrame(match_details,columns=columns)
+=======
+    driver.get(url)
+    date = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[1]/div[1]'))).text
+    date = datetime.strptime(date, '%a %d %b %Y').strftime('%m/%d/%Y')
+    home_team= WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[1]/div[1]/a[2]/span[1]'))).text
+    away_team= WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[3]/div[1]/a[2]/span[1]'))).text
+    score=WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[2]/div[1]'))).text
+    home_score = score.split(' -')[0]
+    away_score = score.split('- ')[1]
+    stats= WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="mainContent"]/div/section[2]/div[2]/div/div[1]/div/div/ul/li[3]')))
+    driver.execute_script("arguments[0].click();",stats)
+    sleep(5)
+    match_stats_df=pd.read_html(driver.page_source)
+>>>>>>> 5c1ff623d798bbe320b2c6722177258d1f9faf6f
     driver.quit()
     match_stats_df=match_stats_df[-1]
     home_stats = {}
