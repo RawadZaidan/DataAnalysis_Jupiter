@@ -53,12 +53,12 @@ class SEASONS(Enum):
     S21_22 = [75289,75290]
 
 class URLS(Enum):
-    Players = "https://drive.google.com/file/d/1I3iBSRKtiIZxHG2yAr9JuYqBNbeGIOlI/view?usp=drive_link"
-    Player_Valuations = "https://drive.google.com/file/d/1Q1Dw7th4SxyR4OLQdo6M2tt6NRhYE7DE/view?usp=drive_link"
-    Games = "https://drive.google.com/file/d/1wEj6Tli0RKy7WsH6PydeWTdZTYx6iNsw/view?usp=drive_link"
-    Games_Events = "https://drive.google.com/file/d/1J-5WbdIHZy_hRQMOjlc5N55iUTE5NxMu/view?usp=drive_link"
-    Competitions = "https://drive.google.com/file/d/1FdewVTkWwUxjyTGbKFRjNMigSiJxw3Nq/view?usp=drive_link"
-    Clubs = "https://drive.google.com/file/d/1SD96aMVyrScGeUTSsCyd58mT9fjS5eFW/view?usp=drive_link"
-    Club_Games = "https://drive.google.com/file/d/1CurzNh94a6mRroVWr2sjLFwl6xEjj1yE/view?usp=drive_link"
-    Appearances = "https://drive.google.com/file/d/1nmK10IgDtTEIc1oC8zIt0w8aQDNleIKh/view?usp=drive_link"
+    Players = "https://drive.google.com/uc?id=1I3iBSRKtiIZxHG2yAr9JuYqBNbeGIOlI&export=download"
+    Player_Valuations = "https://drive.google.com/uc?id=1Q1Dw7th4SxyR4OLQdo6M2tt6NRhYE7DE&export=download"
+    Games = "https://drive.google.com/uc?id=1wEj6Tli0RKy7WsH6PydeWTdZTYx6iNsw&export=download"
+    Games_Events = "https://drive.google.com/uc?id=1J-5WbdIHZy_hRQMOjlc5N55iUTE5NxMu&export=download"
+    Competitions = "https://drive.google.com/uc?id=1FdewVTkWwUxjyTGbKFRjNMigSiJxw3Nq&export=download"
+    Clubs = "https://drive.google.com/uc?id=1SD96aMVyrScGeUTSsCyd58mT9fjS5eFW&export=download"
+    Club_Games = "https://drive.google.com/uc?id=1CurzNh94a6mRroVWr2sjLFwl6xEjj1yE&export=download"
+    Appearances = "https://drive.google.com/uc?id=1nmK10IgDtTEIc1oC8zIt0w8aQDNleIKh&export=download"
 
