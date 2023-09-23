@@ -49,8 +49,12 @@ class DESTINATION_SCHEMA(Enum):
     DESTINATION_NAME = "dw_reporting"
 
 class SEASONS(Enum):
-    S22_23 = [74910,74911]
-    S21_22 = [75289,75290]
+    S22_23 = [74911,75290]
+    S21_22 = [66342,66721]
+    S20_21 = [58896,59275]
+    S19_20 = [46605,46984]
+    S18_19 = [38308,38687]
+
 
 class URLS(Enum):
     Players = "https://drive.google.com/uc?id=1I3iBSRKtiIZxHG2yAr9JuYqBNbeGIOlI&export=download"
