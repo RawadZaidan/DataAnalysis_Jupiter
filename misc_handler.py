@@ -66,14 +66,14 @@ def return_match_df_from_web(first_id,last_id):
             home_stats[stat] = row[0]
             away_stats[stat] = row[2]
         all_stats = ['possession_%', 'shots_on_target', 'shots', 'touches', 'passes','tackles', 'clearances', 'corners', 'offsides', 'yellow_cards','red_cards', 'fouls_conceded']
-        columns = ['date', 'home_team', 'away_team', 'home_score', 'away_score']
+        columns = ['match_id','date', 'home_team', 'away_team', 'home_score', 'away_score']
         for stat in all_stats:
             if stat not in home_stats.keys():
-                home_stats[stat] = 0
-                away_stats[stat] = 0
+                home_stats[stat] = None
+                away_stats[stat] = None
             columns.append(f'home_{stat}')
             columns.append(f'away_{stat}')
-        match_stats= [date, home_team, away_team, home_score, away_score, home_stats['possession_%'], away_stats['possession_%'],
+        match_stats= [match_id,date, home_team, away_team, home_score, away_score, home_stats['possession_%'], away_stats['possession_%'],
                     home_stats['shots_on_target'], away_stats['shots_on_target'], home_stats['shots'], away_stats['shots'],
                     home_stats['touches'], away_stats['touches'], home_stats['passes'], away_stats['passes'],
                     home_stats['tackles'], away_stats['tackles'], home_stats['clearances'], away_stats['clearances'],
