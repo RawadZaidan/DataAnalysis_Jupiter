@@ -9,8 +9,9 @@ from selenium.webdriver.common.by import By
 from time import sleep
 from datetime import datetime
 import pandas as pd
+from lookups import CSV_FOLDER_PATH
 
-def download_files(output_folder):
+def download_files(output_folder = CSV_FOLDER_PATH.NAME.value):
     os.makedirs(output_folder, exist_ok=True) # if folder doesn't exists, it creates one
     for url_enum in URLS:
         url = url_enum.value
@@ -23,6 +24,7 @@ def download_files(output_folder):
             with open(file_path, 'wb') as file:
                 file.write(r.content)
             print(f"Downloaded {file_name} to {output_folder}")
+            print(f'File path is {output_folder}')
         except Exception as e:
             print(f"Failed to download file {table_name}: {str(e)}")
 

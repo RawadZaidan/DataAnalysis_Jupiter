@@ -1,5 +1,5 @@
 import os
-from lookups import ErrorHandling
+from lookups import ErrorHandling, CSV_FOLDER_PATH
 from logging_handler import show_error_message
 import pandas as pd
 
@@ -38,7 +38,7 @@ def drop_nulls(df, all=False, column=None):
     finally:
         return return_df
 
-def get_csv_file_names_into_list(folder_path):
+def get_csv_file_names_into_list(folder_path = CSV_FOLDER_PATH.NAME.value):
     try:
         csv_files_names = []
         for filename in os.listdir(folder_path):
@@ -50,7 +50,7 @@ def get_csv_file_names_into_list(folder_path):
         show_error_message(error_string_prefix, error_string_suffix)
     finally:
         return csv_files_names
-
+    
 def get_blanks(df):
     blank_df = None
     try:
@@ -115,3 +115,6 @@ def return_paths_as_dict(list_of_paths, subfolder_name):
         name_of_table = remove_spaces_from_string(file[:-4])
         return_path_dict[name_of_table] = item_relative_path
     return return_path_dict
+
+def return_files_and_paths_as_dict(folder_name):
+    csvs_dict = {key:value for item in folder_name}
