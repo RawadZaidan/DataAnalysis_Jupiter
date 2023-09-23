@@ -43,14 +43,14 @@ def return_match_df_from_web(first_id,last_id):
     for match_id in range(first_id,last_id):
         url = f'https://www.premierleague.com/match/{match_id}'
         driver.get(url)
-        date = WebDriverWait(driver, 6).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[1]/div[1]'))).text
+        date = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[1]/div[1]'))).text
         date = datetime.strptime(date, '%a %d %b %Y').strftime('%m/%d/%Y')
-        home_team= WebDriverWait(driver, 2).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[1]/div[1]/a[2]/span[1]'))).text
-        away_team= WebDriverWait(driver, 2).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[3]/div[1]/a[2]/span[1]'))).text
-        score=WebDriverWait(driver, 2).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[2]/div[1]'))).text
+        home_team= WebDriverWait(driver, 4).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[1]/div[1]/a[2]/span[1]'))).text
+        away_team= WebDriverWait(driver, 4).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[3]/div[1]/a[2]/span[1]'))).text
+        score=WebDriverWait(driver, 4).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[2]/div[1]'))).text
         home_score = score.split(' -')[0]
         away_score = score.split('- ')[1]
-        stats= WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="mainContent"]/div/section[2]/div[2]/div/div[1]/div/div/ul/li[3]')))
+        stats= WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="mainContent"]/div/section[2]/div[2]/div/div[1]/div/div/ul/li[3]')))
         driver.execute_script("arguments[0].click();",stats)
         sleep(3)
         match_stats_df=pd.read_html(driver.page_source)

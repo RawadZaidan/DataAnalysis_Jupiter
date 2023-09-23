@@ -91,6 +91,9 @@ def return_create_statement_from_df(dataframe,schema_name, table_name):
     create_table_statemnt = f"CREATE TABLE IF NOT EXISTS {schema_name}.{table_name} (\n"
     create_table_statemnt += ",\n".join(fields)
     create_table_statemnt += "\n);"
+    create_index_statement = ""
+
+
     return create_table_statemnt
 
 # error handling + logging missing
