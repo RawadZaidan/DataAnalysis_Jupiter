@@ -51,6 +51,33 @@ def get_csv_file_names_into_list(folder_path = CSV_FOLDER_PATH.NAME.value):
     finally:
         return csv_files_names
     
+import os
+
+def get_csv_file_names_into_dict(folder_path=CSV_FOLDER_PATH.NAME.value):
+    try:
+        csv_files_dict = {}
+        for filename in os.listdir(folder_path):
+            if filename[-4:] == ".csv":
+                csv_files_dict[filename] = None
+    except Exception as e:
+        error_string_prefix = ErrorHandling.CSV_ERROR.value
+        error_string_suffix = str(e)
+        show_error_message(error_string_prefix, error_string_suffix)
+    finally:
+        return csv_files_dict
+
+
+def return_paths_dict(list_of_paths, subfolder_name = CSV_FOLDER_PATH.NAME.value):
+    return_path_dict = {}
+    current_directory = os.getcwd()
+    subfolder_path = os.path.join(current_directory, subfolder_name)
+    for file in list_of_paths:
+        cssss = file
+        item_relative_path = os.path.join(subfolder_path, cssss)
+        name_of_table = remove_spaces_from_string(file)
+        return_path_dict[name_of_table[:-4]] = item_relative_path
+    return return_path_dict
+
 def get_blanks(df):
     blank_df = None
     try:
@@ -115,6 +142,3 @@ def return_paths_as_dict(list_of_paths, subfolder_name):
         name_of_table = remove_spaces_from_string(file[:-4])
         return_path_dict[name_of_table] = item_relative_path
     return return_path_dict
-
-def return_files_and_paths_as_dict(folder_name):
-    csvs_dict = {key:value for item in folder_name}

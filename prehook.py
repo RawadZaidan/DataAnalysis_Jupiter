@@ -1,7 +1,8 @@
 import os
-from database_handler import execute_query, create_connection, close_connection,return_data_as_df, return_create_statement_from_df
+from database_handler import execute_query, create_connection, close_connection,return_data_as_df, return_create_statement_from_df,return_create_statement_from_df_stg
 from lookups import ErrorHandling, PreHookSteps, SQLTablesToReplicate, InputTypes, SourceName, DESTINATION_SCHEMA
 from logging_handler import show_error_message
+from pandas_handler import get_csv_file_names_into_dict, return_paths_dict
 
 #DONE: Executes the sql folder commands: Creates the schema if it doesn't exist
 def execute_sql_folder(db_session, sql_command_directory_path):
@@ -73,6 +74,15 @@ def execute_prehook(sql_command_directory_path='./SQL_Commands'):
         if db_session:
             close_connection(db_session)
 
+def create_stg_tables_from_csv(db_session):
+    dict_csvs = get_csv_file_names_into_dict()
+    dict_csvs_paths = return_paths_dict(dict_csvs)
+    for table_name,path in dict_csvs_paths.items():
+        df = return_data_as_df(file_executor=path , input_type=InputTypes.CSV)
+        query = return_create_statement_from_df_stg(df, DESTINATION_SCHEMA.DESTINATION_NAME.value, table_name)
+        execute_query(db_session=db_session, query=query)
+        print("Done")
+
 def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
     try:
         #Create connection to PG
@@ -81,10 +91,9 @@ def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
         #Execute Sql file: New schema 
         execute_sql_folder(db_session, sql_command_directory_path) 
 
-        #Execute CSV files function (Mahmoud)
-
         #Create staging tables from CSV
-
+        create_stg_tables_from_csv(db_session)
+        
         #Execute Webscraping function (Georges)
 
         #Create staging tables from CSV

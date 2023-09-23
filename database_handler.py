@@ -94,6 +94,25 @@ def return_create_statement_from_df(dataframe,schema_name, table_name):
     create_index_statement = ""
     return create_table_statemnt
 
+def return_create_statement_from_df_stg(dataframe,schema_name, table_name):
+    type_mapping = {
+        'int64':'INT',
+        'float64':'FLOAT',
+        'datetime64[ns]': 'TIMESTAMP',
+        'bool':'BOOLEAN',
+        'object': 'TEXT'
+    }
+    fields = []
+    for column, dtype in dataframe.dtypes.items():
+        sql_type = type_mapping.get(str(dtype), 'TEXT')
+        fields.append(f"{column} {sql_type}")
+    
+    create_table_statemnt = f"CREATE TABLE IF NOT EXISTS {schema_name}.stg_{table_name} (\n"
+    create_table_statemnt += ",\n".join(fields)
+    create_table_statemnt += "\n);"
+    create_index_statement = ""
+    return create_table_statemnt
+
 # error handling + logging missing
 def return_insert_into_sql_statement_from_df(dataframe, schema_name, table_name):
     try:
