@@ -53,7 +53,7 @@ class SEASONS(Enum):
     S21_22 = [66342,66721]
     S20_21 = [58896,59275]
     S19_20 = [46605,46984]
-    S18_19 = [38308,38687]
+    S18_19 = [38308,38688]
 
 class URLS(Enum):
     Players = "https://drive.google.com/uc?id=1I3iBSRKtiIZxHG2yAr9JuYqBNbeGIOlI&export=download"
