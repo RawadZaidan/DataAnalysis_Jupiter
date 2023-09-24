@@ -1,15 +1,24 @@
 import os
 from database_handler import execute_query, create_connection, close_connection,return_data_as_df, return_create_statement_from_df,return_create_statement_from_df_stg
-from lookups import ErrorHandling, PreHookSteps, SQLTablesToReplicate, InputTypes, SourceName, DESTINATION_SCHEMA
+from lookups import ErrorHandling, PreHookSteps, SQLTablesToReplicate, InputTypes, SourceName, DESTINATION_SCHEMA,match_id,WEBSCRAPINGSTAGINGTABLE
 from logging_handler import show_error_message
 from pandas_handler import get_csv_file_names_into_dict, return_paths_dict
-from misc_handler import download_files
+from misc_handler import download_files,return_match_df_from_web
 from database_handler import create_connection
 
 def first_time_run_download():
     db_session = create_connection()
     download_files()
     create_stg_tables_from_csv(db_session)
+
+def first_time_web_scraping():
+    db_session=create_connection()
+    df_web_stg=return_match_df_from_web(match_id.first_run_id_1.value,match_id.first_run_id_2.value)
+    create_statement=return_create_statement_from_df_stg(df_web_stg,DESTINATION_SCHEMA.DESTINATION_NAME.value,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value)
+    execute_query(db_session,create_statement)
+
+
+
 
 #DONE: Executes the sql folder commands: Creates the schema if it doesn't exist
 def execute_sql_folder(db_session, sql_command_directory_path):

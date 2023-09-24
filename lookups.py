@@ -71,3 +71,7 @@ class CSV_FOLDER_PATH(Enum):
 
 class WEBSCRAPINGSTAGINGTABLE(Enum):
     STGTABLENAME = "web_stats"
+
+class match_id(Enum):
+    first_run_id_1=66342
+    first_run_id_2=66343
