@@ -5,7 +5,7 @@ import pandas as pd
 
 config_dict = {
     "host"      : "localhost",
-    "database"  : "dvd",
+    "database"  : "PremierLeague",
     "user"      : "postgres",
     "password"  : "Tonystark123@"
 }
