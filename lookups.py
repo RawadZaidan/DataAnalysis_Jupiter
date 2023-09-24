@@ -49,6 +49,7 @@ class DESTINATION_SCHEMA(Enum):
     DESTINATION_NAME = "premier_league"
 
 class SEASONS(Enum):
+    S23_24 = [93321,93370]
     S22_23 = [74911,75290]
     S21_22 = [66342,66721]
     S20_21 = [58896,59275]
