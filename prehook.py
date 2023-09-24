@@ -89,14 +89,13 @@ def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
         db_session = create_connection()
 
         #Execute Sql file: New schema 
-        execute_sql_folder(db_session, sql_command_directory_path) 
+        execute_sql_folder(db_session, sql_command_directory_path)
 
         #Create staging tables from CSV
         create_stg_tables_from_csv(db_session)
         
         #Execute Webscraping function (Georges)
-
-        #Create staging tables from CSV
+        
 
         #Close the connection
         close_connection(db_session)
