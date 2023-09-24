@@ -5,6 +5,7 @@ from logging_handler import show_error_message
 from pandas_handler import get_csv_file_names_into_dict, return_paths_dict
 from misc_handler import download_files,return_match_df_from_web
 from database_handler import create_connection
+import pandas as pd
 
 def first_time_run_download():
     db_session = create_connection()
@@ -14,6 +15,8 @@ def first_time_run_download():
 def first_time_web_scraping():
     db_session=create_connection()
     df_web_stg=return_match_df_from_web(match_id.first_run_id_1.value,match_id.first_run_id_2.value)
+    df_web_stg['date']=pd.to_datetime(df_web_stg['date'])
+    df_web_stg.columns=df_web_stg.columns.str.replace("_%","")
     create_statement=return_create_statement_from_df_stg(df_web_stg,DESTINATION_SCHEMA.DESTINATION_NAME.value,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value)
     execute_query(db_session,create_statement)
 
