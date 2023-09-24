@@ -67,3 +67,6 @@ class URLS(Enum):
 
 class CSV_FOLDER_PATH(Enum):
     NAME = "tables"
+
+class WEBSCRAPINGSTAGINGTABLE(Enum):
+    STGTABLENAME = "web_stats"
