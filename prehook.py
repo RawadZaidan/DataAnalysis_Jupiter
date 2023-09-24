@@ -3,6 +3,13 @@ from database_handler import execute_query, create_connection, close_connection,
 from lookups import ErrorHandling, PreHookSteps, SQLTablesToReplicate, InputTypes, SourceName, DESTINATION_SCHEMA
 from logging_handler import show_error_message
 from pandas_handler import get_csv_file_names_into_dict, return_paths_dict
+from misc_handler import download_files
+from database_handler import create_connection
+
+def first_time_run_download():
+    db_session = create_connection()
+    download_files()
+    create_stg_tables_from_csv(db_session)
 
 #DONE: Executes the sql folder commands: Creates the schema if it doesn't exist
 def execute_sql_folder(db_session, sql_command_directory_path):
@@ -95,7 +102,7 @@ def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
         create_stg_tables_from_csv(db_session)
         
         #Execute Webscraping function (Georges)
-        
+
 
         #Close the connection
         close_connection(db_session)
