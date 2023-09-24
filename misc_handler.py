@@ -50,8 +50,12 @@ def return_match_df_from_web(first_id,last_id):
         home_team= WebDriverWait(driver, 4).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[1]/div[1]/a[2]/span[1]'))).text
         away_team= WebDriverWait(driver, 4).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[3]/div[1]/a[2]/span[1]'))).text
         score=WebDriverWait(driver, 4).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[2]/div[1]'))).text
-        home_score = score.split(' -')[0]
-        away_score = score.split('- ')[1]
+        try:
+            home_score = score.split(' -')[0]
+            away_score = score.split('- ')[1]
+        except:
+            home_score=None
+            away_score=None
         stats= WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="mainContent"]/div/section[2]/div[2]/div/div[1]/div/div/ul/li[3]')))
         driver.execute_script("arguments[0].click();",stats)
         sleep(3)
