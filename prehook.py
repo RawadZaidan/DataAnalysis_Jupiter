@@ -19,6 +19,7 @@ def first_time_web_scraping():
     df_web_stg.columns=df_web_stg.columns.str.replace("_%","")
     create_statement=return_create_statement_from_df_stg(df_web_stg,DESTINATION_SCHEMA.DESTINATION_NAME.value,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value)
     execute_query(db_session,create_statement)
+    #first_time
 
 
 
