@@ -12,8 +12,7 @@ def first_time_run_download():
     download_files()
     create_stg_tables_from_csv(db_session)
 
-def first_time_web_scraping():
-    db_session=create_connection()
+def first_time_web_scraping(db_session):
     df_web_stg=return_match_df_from_web(match_id.first_run_id_1.value,match_id.first_run_id_2.value)
     df_web_stg['date']=pd.to_datetime(df_web_stg['date'])
     df_web_stg.columns=df_web_stg.columns.str.replace("_%","")
@@ -118,7 +117,7 @@ def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
         read_csv_create_stg_into_pg(db_session)
         
         #Execute Webscraping function (Georges)
-        
+        first_time_web_scraping(db_session)
 
         #Close the connection
         close_connection(db_session)
