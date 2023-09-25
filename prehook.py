@@ -1,9 +1,9 @@
 import os
 from database_handler import execute_query, create_connection, close_connection,return_data_as_df, return_create_statement_from_df,return_create_statement_from_df_stg
-from lookups import ErrorHandling, PreHookSteps, SQLTablesToReplicate, InputTypes, SourceName, DESTINATION_SCHEMA,match_id,WEBSCRAPINGSTAGINGTABLE
+from lookups import ErrorHandling, PreHookSteps, SQLTablesToReplicate, InputTypes, SourceName, DESTINATION_SCHEMA,match_id,WEBSCRAPINGSTAGINGTABLE, READURLS
 from logging_handler import show_error_message
 from pandas_handler import get_csv_file_names_into_dict, return_paths_dict
-from misc_handler import download_files,return_match_df_from_web
+from misc_handler import download_files,return_match_df_from_web, read_csv_files_from_drive
 from database_handler import create_connection
 import pandas as pd
 
@@ -100,6 +100,12 @@ def create_stg_tables_from_csv(db_session):
         execute_query(db_session=db_session, query=query)
         print("Done")
 
+def read_csv_create_stg_into_pg(db_session):
+    for url in READURLS:
+        df = read_csv_files_from_drive(url.value)
+        query = return_create_statement_from_df_stg(df, schema_name=DESTINATION_SCHEMA.DESTINATION_NAME.value, table_name=url.name)
+        execute_query(db_session=db_session, query=query)       
+
 def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
     try:
         #Create connection to PG
@@ -109,7 +115,7 @@ def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
         execute_sql_folder(db_session, sql_command_directory_path)
 
         #Create staging tables from CSV
-        create_stg_tables_from_csv(db_session)
+        read_csv_create_stg_into_pg(db_session)
         
         #Execute Webscraping function (Georges)
         

@@ -7,7 +7,7 @@ config_dict = {
     "host"      : "localhost",
     "database"  : "PremierLeague",
     "user"      : "postgres",
-    "password"  : "admin"
+    "password"  : "Tonystark123@"
 }
 
 def create_connection():

@@ -11,6 +11,12 @@ from datetime import datetime
 import pandas as pd
 from lookups import CSV_FOLDER_PATH
 
+def read_csv_files_from_drive(url):
+    file_id = url.split("/")[-2]
+    reading_link = f"https://drive.google.com/uc?id={file_id}"
+    df = pd.read_csv(reading_link)
+    return df
+
 def download_files(output_folder = CSV_FOLDER_PATH.NAME.value):
     os.makedirs(output_folder, exist_ok=True) # if folder doesn't exists, it creates one
     for url_enum in URLS:
