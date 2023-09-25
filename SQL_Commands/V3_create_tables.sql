@@ -48,7 +48,7 @@ CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.dim_competition(
 --------------------
 CREATE TABLE IF NOT EXISTS premier_league.fact_player_performance (
     match_id INT REFERENCES premier_league.dim_match(match_id),
-    player_id INT REFERENCES premier_league.dim_player(player_id),
+    player_id INT PRIMARY KEY REFERENCES premier_league.dim_player(player_id),
     goals_scored INT,
     assists INT,
     shots_on_goal INT,
@@ -63,7 +63,7 @@ CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.fact_player_perf
 CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.fact_player_performance(player_id);
 --------------------
 CREATE TABLE IF NOT EXISTS premier_league.fact_game_results (
-    match_id INT REFERENCES premier_league.dim_match(match_id),
+    match_id INT PRIMARY KEY REFERENCES premier_league.dim_match(match_id),
     home_team_score INT,
     away_team_score INT,
     home_team_goals INT,
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS premier_league.fact_competition_results (
     champion_team_id INT REFERENCES premier_league.dim_team(team_id),
     runner_up_team_id INT REFERENCES premier_league.dim_team(team_id),
     top_scorer_player_id INT REFERENCES premier_league.dim_player(player_id),
-    top_scorer_goals INT
+    top_scorer_goals INT 
 );
-CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.fact_competition_results(match_id);
+CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.fact_competition_results(competition_id);
 --------------------
