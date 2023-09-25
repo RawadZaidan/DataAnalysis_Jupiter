@@ -102,7 +102,7 @@ def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
         create_stg_tables_from_csv(db_session)
         
         #Execute Webscraping function (Georges)
-
+        
 
         #Close the connection
         close_connection(db_session)
