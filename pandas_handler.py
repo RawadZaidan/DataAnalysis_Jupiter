@@ -25,7 +25,7 @@ def drop_nulls(df, all=False, column=None):
         if all:
             return_df = df.dropna(how='all')
         elif column is not None:
-            return_df = df.dropna(subset=[column])
+            return_df = df.dropna(subset=column)
         elif column is not None and all:
             print('Please pick only 1 type. Leave empty for any, all for rows ')
         else:
@@ -33,6 +33,26 @@ def drop_nulls(df, all=False, column=None):
         return return_df
     except Exception as e:
         error_string_prefix = ErrorHandling.PANDAS_NULLS_ERROR.value
+        error_string_suffix = str(e)
+        show_error_message(error_string_prefix, error_string_suffix)
+    finally:
+        return return_df
+    
+
+def fill_nulls(df, all=False, column=None):
+    try:
+        return_df = df.copy()
+        if all:
+            return_df = df.fillna(0)
+        elif column is not None:
+            return_df[column] =df[column].fillna(0)
+        elif column is not None and all:
+            print('Please pick only 1 type. Leave empty for any, all for rows ')
+        else:
+            return_df = df.fillna(0)
+        return return_df
+    except Exception as e:
+        error_string_prefix = ErrorHandling.PANDAS_FILL_NULLS_ERROR.value
         error_string_suffix = str(e)
         show_error_message(error_string_prefix, error_string_suffix)
     finally:

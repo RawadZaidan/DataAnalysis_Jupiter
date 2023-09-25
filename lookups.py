@@ -16,6 +16,7 @@ class ErrorHandling(Enum):
     DB_RETURN_INSERT_INTO_SQL_STMT_ERROR = "Return insert into sql dataframe error:"
     CSV_ERROR = "Error importing csv files from path"
     PANDAS_NULLS_ERROR = "Error dropping nulls from df"
+    PANDAS_FILL_NULLS_ERROR="Error replacing nulls from df"
 
 class InputTypes(Enum):
     SQL = "SQL"

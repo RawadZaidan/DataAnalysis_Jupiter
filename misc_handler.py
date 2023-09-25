@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from time import sleep
 from datetime import datetime
 import pandas as pd
+from pandas_handler import drop_nulls,fill_nulls
 from lookups import CSV_FOLDER_PATH
 
 def read_csv_files_from_drive(url):
@@ -92,3 +93,12 @@ def return_match_df_from_web(first_id,last_id):
     match_df = pd.DataFrame(match_details,columns=columns)
     driver.quit()
     return match_df
+
+def df_web_cleaning(web_df):
+    drop_subset=['home_score','away_score']
+    fill_subset=['home_shots_on_target','away_shots_on_target','away_shots','home_touches','away_touches','home_passes','away_passes','home_tackles','away_tackles','home_clearances',
+                 'away_clearances','home_corners','away_corners','home_offsides','away_offsides','home_yellow_cards','away_yellow_cards',
+                 'home_red_cards','away_red_cards','home_fouls_conceded','away_fouls_conceded']
+    return_df=drop_nulls(web_df,column=drop_subset)
+    return_df=fill_nulls(return_df,column=fill_subset)
+    return return_df
