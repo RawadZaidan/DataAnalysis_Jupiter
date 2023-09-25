@@ -21,9 +21,6 @@ def first_time_web_scraping():
     execute_query(db_session,create_statement)
     #first_time
 
-
-
-
 #DONE: Executes the sql folder commands: Creates the schema if it doesn't exist
 def execute_sql_folder(db_session, sql_command_directory_path):
     try:

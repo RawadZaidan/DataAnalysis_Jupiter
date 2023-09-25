@@ -66,9 +66,6 @@ class URLS(Enum):
     Appearances = "https://drive.google.com/uc?id=1nmK10IgDtTEIc1oC8zIt0w8aQDNleIKh&export=download"
 
 class CSV_FOLDER_PATH(Enum):
-<<<<<<< HEAD
-    NAME = "tables"
-=======
     NAME = "tables"
 
 class WEBSCRAPINGSTAGINGTABLE(Enum):
@@ -77,4 +74,3 @@ class WEBSCRAPINGSTAGINGTABLE(Enum):
 class match_id(Enum):
     first_run_id_1=66342
     first_run_id_2=66343
->>>>>>> fcf73627606662162a82c96cfb38f8d35d194e04
