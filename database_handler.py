@@ -7,7 +7,7 @@ config_dict = {
     "host"      : "localhost",
     "database"  : "PremierLeague",
     "user"      : "postgres",
-    "password"  : "Tonystark123@"
+    "password"  : "admin"
 }
 
 def create_connection():
@@ -129,6 +129,29 @@ def return_insert_into_sql_statement_from_df(dataframe, schema_name, table_name)
                     value_strs.append(f"'{val}'")
             values = ', '.join(value_strs)
             insert_statement = f'INSERT INTO {schema_name}.{table_name} ({columns}) VALUES ({values});'
+            insert_statement_list.append(insert_statement)
+        return insert_statement_list
+    except Exception as e:
+        error_string_prefix = ErrorHandling.DB_RETURN_INSERT_INTO_SQL_STMT_ERROR.value
+        error_string_suffix = str(e)
+        show_error_message(error_string_prefix, error_string_suffix)
+
+def return_insert_into_sql_statement_from_df_stg(dataframe, schema_name, table_name):
+    try:
+        columns = ', '.join(dataframe.columns)
+        insert_statement_list = []
+        for _, row in dataframe.iterrows():
+            value_strs = []
+            for val in row.values:
+                if pd.isna(val):
+                    value_strs.append("NULL")
+                elif isinstance(val, (str)):
+                    val_escaped = val.replace("'", "''")
+                    value_strs.append(f"'{val_escaped}'")
+                else:
+                    value_strs.append(f"'{val}'")
+            values = ', '.join(value_strs)
+            insert_statement = f'INSERT INTO {schema_name}.stg_{table_name} ({columns}) VALUES ({values});'
             insert_statement_list.append(insert_statement)
         return insert_statement_list
     except Exception as e:

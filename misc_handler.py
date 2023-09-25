@@ -10,7 +10,8 @@ from time import sleep
 from datetime import datetime
 import pandas as pd
 from pandas_handler import drop_nulls,fill_nulls
-from lookups import CSV_FOLDER_PATH
+from lookups import CSV_FOLDER_PATH,InputTypes,DESTINATION_SCHEMA,WEBSCRAPINGSTAGINGTABLE
+from database_handler import return_data_as_df,return_insert_into_sql_statement_from_df_stg,execute_query
 
 def read_csv_files_from_drive(url):
     file_id = url.split("/")[-2]
@@ -101,4 +102,20 @@ def df_web_cleaning(web_df):
                  'home_red_cards','away_red_cards','home_fouls_conceded','away_fouls_conceded']
     return_df=drop_nulls(web_df,column=drop_subset)
     return_df=fill_nulls(return_df,column=fill_subset)
+    return_df['date']=pd.to_datetime(return_df['date'])
+    return_df.columns=return_df.columns.str.replace("_%","")
+    if return_df.columns[0]=='Unnamed: 0': 
+        return_df.pop(return_df.columns[0])
     return return_df
+
+def insert_web_into_sql(db_session,source_folder):
+    csv_files=find_csv_files(source_folder)
+    for file in csv_files:
+        df=return_data_as_df(file,InputTypes.CSV)
+        df=df_web_cleaning(df)
+        insert_statement=return_insert_into_sql_statement_from_df_stg(df,DESTINATION_SCHEMA.DESTINATION_NAME.value,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value)
+        for insert in insert_statement:
+            execute_query(db_session=db_session, query= insert)
+        
+    
+
