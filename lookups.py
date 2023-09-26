@@ -19,6 +19,7 @@ class ErrorHandling(Enum):
     PANDAS_FILL_NULLS_ERROR="Error replacing nulls from df"
     RETURN_NET_TRASNFER_ERROR = "Error handling net transfer fee"
     CLUBS_ERROR = "Error cleaning clubs csv"
+    PLAYERVALUATIONS_ERROR = "Error cleaning player valuations csv"
 
 class InputTypes(Enum):
     SQL = "SQL"

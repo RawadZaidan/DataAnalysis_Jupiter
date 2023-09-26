@@ -3,6 +3,7 @@ from logging_handler import show_error_message
 from pandas_handler import process_net_transfer_record,drop_nulls,fill_nulls
 import pandas as pd
 
+#Function to clean clubs df
 def clean_clubs_function(df):
     try:    
         filtered_df = df.loc[(df['domestic_competition_id'] == 'GB1') & (df['last_season'] >= 2018)].sort_values(by='net_transfer_record',ascending=True)
@@ -11,6 +12,7 @@ def clean_clubs_function(df):
         filtered_df['net_transfer_record'] = filtered_df['net_transfer_record'].apply(process_net_transfer_record)
         filtered_df.reset_index(inplace=True, drop=True)
         return filtered_df
+    
     except Exception as e:
         error_string_prefix = ErrorHandling.CLUBS_ERROR.value
         error_string_suffix = str(e)
