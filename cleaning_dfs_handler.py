@@ -49,3 +49,33 @@ def df_web_cleaning(web_df):
     if return_df.columns[0]=='Unnamed: 0': 
         return_df.pop(return_df.columns[0])
     return return_df
+
+
+def clean_games_function_georges(df):
+    try:    
+        filtered_df = df.loc[(df['competition_id'] == 'GB1') & (df['season'] >= 2018)].copy()
+        columns_to_drop = ['url']  # Replace with the actual column names you want to drop
+        filtered_df.drop(columns=columns_to_drop, inplace=True)
+        filtered_df['aggregate'] = filtered_df[['home_club_goals','away_club_goals']].apply(lambda row: '-'.join(row.values.astype(str)), axis=1)
+        filtered_df['date'] = pd.to_datetime(filtered_df['date'])
+        filtered_df.reset_index(inplace=True, drop=True)
+        return filtered_df
+    
+    except Exception as e:
+        error_string_prefix = ErrorHandling.CLUBS_ERROR.value
+        error_string_suffix = str(e)
+        show_error_message(error_string_prefix, error_string_suffix)
+
+def clean_games_events_function_georges(df,df_games):
+    try:    
+        filtered_df =pd.merge(df,df_games[['game_id','competition_id']],on='game_id',how='inner')
+        filtered_df=filtered_df.loc[(filtered_df['competition_id'] == 'GB1')].copy()
+        columns_to_drop = ['competition_id']  # Replace with the actual column names you want to drop
+        filtered_df.drop(columns=columns_to_drop, inplace=True)
+        filtered_df.reset_index(inplace=True, drop=True)
+        return filtered_df
+    
+    except Exception as e:
+        error_string_prefix = ErrorHandling.CLUBS_ERROR.value
+        error_string_suffix = str(e)
+        show_error_message(error_string_prefix, error_string_suffix)
