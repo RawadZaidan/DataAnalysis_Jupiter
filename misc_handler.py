@@ -12,6 +12,7 @@ import pandas as pd
 from pandas_handler import drop_nulls,fill_nulls
 from lookups import CSV_FOLDER_PATH,InputTypes,DESTINATION_SCHEMA,WEBSCRAPINGSTAGINGTABLE
 from database_handler import return_data_as_df,return_insert_into_sql_statement_from_df_stg,execute_query
+from cleaning_dfs_handler import df_web_cleaning
 
 def read_csv_files_from_drive(url):
     file_id = url.split("/")[-2]
@@ -95,18 +96,6 @@ def return_match_df_from_web(first_id,last_id):
     driver.quit()
     return match_df
 
-def df_web_cleaning(web_df):
-    drop_subset=['home_score','away_score']
-    fill_subset=['home_shots_on_target','away_shots_on_target','away_shots','home_touches','away_touches','home_passes','away_passes','home_tackles','away_tackles','home_clearances',
-                 'away_clearances','home_corners','away_corners','home_offsides','away_offsides','home_yellow_cards','away_yellow_cards',
-                 'home_red_cards','away_red_cards','home_fouls_conceded','away_fouls_conceded']
-    return_df=drop_nulls(web_df,column=drop_subset)
-    return_df=fill_nulls(return_df,column=fill_subset)
-    return_df['date']=pd.to_datetime(return_df['date'])
-    return_df.columns=return_df.columns.str.replace("_%","")
-    if return_df.columns[0]=='Unnamed: 0': 
-        return_df.pop(return_df.columns[0])
-    return return_df
 
 def insert_web_into_sql(db_session,source_folder):
     csv_files=find_csv_files(source_folder)

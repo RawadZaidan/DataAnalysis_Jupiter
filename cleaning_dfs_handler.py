@@ -1,6 +1,7 @@
 from lookups import ErrorHandling
 from logging_handler import show_error_message
-from pandas_handler import process_net_transfer_record
+from pandas_handler import process_net_transfer_record,drop_nulls,fill_nulls
+import pandas as pd
 
 def clean_clubs_function(df):
     try:    
@@ -14,3 +15,16 @@ def clean_clubs_function(df):
         error_string_prefix = ErrorHandling.CLUBS_ERROR.value
         error_string_suffix = str(e)
         show_error_message(error_string_prefix, error_string_suffix)
+
+def df_web_cleaning(web_df):
+    drop_subset=['home_score','away_score']
+    fill_subset=['home_shots_on_target','away_shots_on_target','away_shots','home_touches','away_touches','home_passes','away_passes','home_tackles','away_tackles','home_clearances',
+                 'away_clearances','home_corners','away_corners','home_offsides','away_offsides','home_yellow_cards','away_yellow_cards',
+                 'home_red_cards','away_red_cards','home_fouls_conceded','away_fouls_conceded']
+    return_df=drop_nulls(web_df,column=drop_subset)
+    return_df=fill_nulls(return_df,column=fill_subset)
+    return_df['date']=pd.to_datetime(return_df['date'])
+    return_df.columns=return_df.columns.str.replace("_%","")
+    if return_df.columns[0]=='Unnamed: 0': 
+        return_df.pop(return_df.columns[0])
+    return return_df
