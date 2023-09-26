@@ -67,7 +67,8 @@ def clean_games_function_georges(df):
         show_error_message(error_string_prefix, error_string_suffix)
 
 def clean_games_events_function_georges(df,df_games):
-    try:    
+    try: 
+        df_games=clean_games_function_georges(df_games)  
         filtered_df =pd.merge(df,df_games[['game_id','competition_id']],on='game_id',how='inner')
         filtered_df=filtered_df.loc[(filtered_df['competition_id'] == 'GB1')].copy()
         columns_to_drop = ['competition_id']  # Replace with the actual column names you want to drop
