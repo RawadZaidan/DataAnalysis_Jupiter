@@ -37,6 +37,22 @@ def clean_player_valuations_function(df):
         error_string_suffix = str(e)
         show_error_message(error_string_prefix, error_string_suffix)
 
+def clean_players_function(df):
+    try:
+        columns_to_keep = ['player_id','name','last_season','current_club_id','country_of_citizenship','position',
+                   'foot','height_in_cm','highest_market_value_in_eur','current_club_name','current_club_domestic_competition_id']
+        df = df[columns_to_keep]
+        df = df.loc[(df['last_season'] >= 2018) & (df['current_club_domestic_competition_id'] == 'GB1')].sort_values(by='highest_market_value_in_eur', ascending=False)
+        df = drop_nulls(df, all=True)
+        df = drop_nulls(df,False,['foot','height_in_cm'])
+        df = fill_nulls(df,False,'highest_market_value_in_eur')
+        df.reset_index(inplace=True, drop=True)
+        return df
+    except Exception as e:
+        error_string_prefix = ErrorHandling.PLAYERVALUATIONS_ERROR.value
+        error_string_suffix = str(e)
+        show_error_message(error_string_prefix, error_string_suffix)
+
 def df_web_cleaning(web_df):
     drop_subset=['home_score','away_score']
     fill_subset=['home_shots_on_target','away_shots_on_target','away_shots','home_touches','away_touches','home_passes','away_passes','home_tackles','away_tackles','home_clearances',
@@ -48,11 +64,7 @@ def df_web_cleaning(web_df):
     return_df.columns=return_df.columns.str.replace("_%","")
     if return_df.columns[0]=='Unnamed: 0': 
         return_df.pop(return_df.columns[0])
-<<<<<<< HEAD
     return return_df
-=======
-    return return_df
-
 
 def clean_games_function_georges(df):
     try:    
@@ -83,4 +95,3 @@ def clean_games_events_function_georges(df,df_games):
         error_string_prefix = ErrorHandling.CLUBS_ERROR.value
         error_string_suffix = str(e)
         show_error_message(error_string_prefix, error_string_suffix)
->>>>>>> 864382c49fa7af62981486b0b9f4cd2ce667a1af
