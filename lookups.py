@@ -65,8 +65,10 @@ class URLS(Enum):
     Games_Events = "https://drive.google.com/uc?id=1J-5WbdIHZy_hRQMOjlc5N55iUTE5NxMu&export=download"
     Competitions = "https://drive.google.com/uc?id=1FdewVTkWwUxjyTGbKFRjNMigSiJxw3Nq&export=download"
     Clubs = "https://drive.google.com/uc?id=1SD96aMVyrScGeUTSsCyd58mT9fjS5eFW&export=download"
-    Club_Games = "https://drive.google.com/uc?id=1CurzNh94a6mRroVWr2sjLFwl6xEjj1yE&export=download"
     Appearances = "https://drive.google.com/uc?id=1nmK10IgDtTEIc1oC8zIt0w8aQDNleIKh&export=download"
+
+class MAIN_SOURCE_CSV(Enum):
+    url = 'https://www.kaggle.com/datasets/davidcariboo/player-scores'
 
 class CSV_FOLDER_PATH(Enum):
     NAME = "tables"
@@ -85,5 +87,4 @@ class READURLS(Enum):
     Games_Events = "https://drive.google.com/file/d/1J-5WbdIHZy_hRQMOjlc5N55iUTE5NxMu/view?usp=drive_link"
     Competitions = "https://drive.google.com/file/d/1FdewVTkWwUxjyTGbKFRjNMigSiJxw3Nq/view?usp=drive_link"
     Clubs = "https://drive.google.com/file/d/1SD96aMVyrScGeUTSsCyd58mT9fjS5eFW/view?usp=drive_link"
-    Club_Games = "https://drive.google.com/file/d/1CurzNh94a6mRroVWr2sjLFwl6xEjj1yE/view?usp=drive_link"
     Appearances = "https://drive.google.com/file/d/1nmK10IgDtTEIc1oC8zIt0w8aQDNleIKh/view?usp=drive_link"

@@ -2,10 +2,11 @@ import os
 from database_handler import execute_query, create_connection, close_connection,return_data_as_df, return_create_statement_from_df,return_create_statement_from_df_stg
 from lookups import ErrorHandling, PreHookSteps, SQLTablesToReplicate, InputTypes, SourceName, DESTINATION_SCHEMA,match_id,WEBSCRAPINGSTAGINGTABLE, READURLS
 from logging_handler import show_error_message
-from pandas_handler import get_csv_file_names_into_dict, return_paths_dict
+from pandas_handler import get_csv_file_names_into_dict, return_paths_dict, clean_clubs_function
 from misc_handler import download_files,return_match_df_from_web, read_csv_files_from_drive
 from database_handler import create_connection
 import pandas as pd
+import cleaning_dfs_handler
 
 def first_time_run_download():
     db_session = create_connection()
@@ -104,6 +105,21 @@ def read_csv_create_stg_into_pg(db_session):
         df = read_csv_files_from_drive(url.value)
         query = return_create_statement_from_df_stg(df, schema_name=DESTINATION_SCHEMA.DESTINATION_NAME.value, table_name=url.name)
         execute_query(db_session=db_session, query=query)       
+
+def read_csv_create_stg_into_pg_clean(db_session):
+    func_dict ={'Players' : '',
+        'Player_Valuations' : '',
+        'Games' : '',
+        'Games_Events' : '',
+        'Competitions' : '',
+        'Clubs' : cleaning_dfs_handler.clean_clubs_function(df),
+        'Club_Games' : '',
+        'Appearances' : ''}
+    for url in READURLS:
+        df = read_csv_files_from_drive(url.value)
+        func_dict[url.name]
+        query = return_create_statement_from_df_stg(df, schema_name=DESTINATION_SCHEMA.DESTINATION_NAME.value, table_name=url.name)
+        execute_query(db_session=db_session, query=query)   
 
 def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
     try:
