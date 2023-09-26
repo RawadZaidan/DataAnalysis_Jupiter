@@ -56,7 +56,6 @@ def drop_nulls(df, all=False, column=None):
         show_error_message(error_string_prefix, error_string_suffix)
     finally:
         return return_df
-    
 
 def fill_nulls(df, all=False, column=None):
     try:
@@ -69,6 +68,23 @@ def fill_nulls(df, all=False, column=None):
             print('Please pick only 1 type. Leave empty for any, all for rows ')
         else:
             return_df = df.fillna(0)
+        return return_df
+    except Exception as e:
+        error_string_prefix = ErrorHandling.PANDAS_FILL_NULLS_ERROR.value
+        error_string_suffix = str(e)
+        show_error_message(error_string_prefix, error_string_suffix)
+    finally:
+        return return_df
+
+def fill_nulls_with_mean(df, all=False, column=None):
+    try:
+        return_df = df.copy()
+        if all:
+            return_df.fillna(return_df.mean(), inplace=True)
+        elif column is not None:
+            return_df[column].fillna(return_df[column].mean(), inplace=True)
+        elif column is not None and all:
+            print('Please pick only 1 type. Leave empty for any, all for rows ')
         return return_df
     except Exception as e:
         error_string_prefix = ErrorHandling.PANDAS_FILL_NULLS_ERROR.value
