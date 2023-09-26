@@ -17,6 +17,8 @@ class ErrorHandling(Enum):
     CSV_ERROR = "Error importing csv files from path"
     PANDAS_NULLS_ERROR = "Error dropping nulls from df"
     PANDAS_FILL_NULLS_ERROR="Error replacing nulls from df"
+    RETURN_NET_TRASNFER_ERROR = "Error handling net transfer fee"
+    CLUBS_ERROR = "Error cleaning clubs csv"
 
 class InputTypes(Enum):
     SQL = "SQL"

@@ -6,3 +6,4 @@ tables/Games.csv
 tables/Games_Events.csv
 tables/Player_Valuations.csv
 tables/Players.csv
+db_pass.pkl
