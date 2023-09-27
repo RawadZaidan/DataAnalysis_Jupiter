@@ -42,7 +42,7 @@ def clean_player_valuations_function(df):
 
 def clean_players_function(df):
     try:
-        columns_to_keep = ['player_id','name','last_season','current_club_id','country_of_citizenship','position',
+        columns_to_keep = ['player_id','name','date_of_birth','last_season','current_club_id','country_of_citizenship','position',
                    'foot','height_in_cm','highest_market_value_in_eur','current_club_name','current_club_domestic_competition_id']
         df = df[columns_to_keep]
         df = df.loc[(df['last_season'] >= 2018) & (df['current_club_domestic_competition_id'] == 'GB1')].sort_values(by='highest_market_value_in_eur', ascending=False)
