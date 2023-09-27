@@ -1,40 +1,37 @@
+--date of birth droped (not found in staging anymore)
 CREATE TABLE IF NOT EXISTS premier_league.dim_player (
     player_id SERIAL PRIMARY KEY,
     player_name VARCHAR,
     nationality VARCHAR,
-    date_of_birth DATE,
     position VARCHAR,
-    price DECIMAL(10, 2),
-    team_id INT REFERENCES premier_league.dim_team(team_id)
+    price DECIMAL,
+    club_id INT REFERENCES premier_league.dim_club(club_id)
 );
-
 CREATE INDEX IF NOT EXISTS idx_player_id ON premier_league.dim_player(player_id);
-
 INSERT INTO premier_league.dim_player
-   (player_id, player_name, nationality, date_of_birth, position, price, team_id)
+   (player_id, player_name, nationality,  position, price, club_id)
 SELECT 
    src_player.player_id,
    src_player.name,
    src_player.country_of_citizenship,
-   src_player.date_of_birth::DATE,
    src_player.position,
-   src_player.market_value_in_eur,
+   src_player.highest_market_value_in_eur,
    src_player.current_club_id
 FROM premier_league.stg_players AS src_player
 ON CONFLICT (player_id)
 DO UPDATE SET 
    player_name = excluded.player_name,
    nationality = excluded.nationality,
-   date_of_birth = excluded.date_of_birth,
    position = excluded.position,
    price = excluded.price,
-   team_id = excluded.team_id;
+   club_id = excluded.club_id;
+
 -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS premier_league.dim_match (
     match_id SERIAL PRIMARY KEY,
     match_date DATE,
-    home_team_id INT REFERENCES premier_league.dim_team(team_id),
-    away_team_id INT REFERENCES premier_league.dim_team(team_id),
+    home_team_id INT REFERENCES premier_league.dim_club(club_id),
+    away_team_id INT REFERENCES premier_league.dim_club(club_id),
     stadium_name VARCHAR,
     referee_name VARCHAR
 );

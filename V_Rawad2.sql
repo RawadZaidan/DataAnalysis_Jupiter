@@ -30,11 +30,13 @@ DO UPDATE SET
    price = excluded.price,
    team_id = excluded.team_id;
 -----------------------------------------------------
+
+--changed dim team to dim club
 CREATE TABLE IF NOT EXISTS premier_league.dim_match (
     match_id SERIAL PRIMARY KEY,
     match_date DATE,
-    home_team_id INT REFERENCES premier_league.dim_team(team_id),
-    away_team_id INT REFERENCES premier_league.dim_team(team_id),
+    home_team_id INT REFERENCES premier_league.dim_club(club_id),
+    away_team_id INT REFERENCES premier_league.dim_club(club_id),
     stadium_name VARCHAR,
     referee_name VARCHAR
 );
