@@ -1,12 +1,10 @@
 --Georges
-CREATE TABLE IF NOT EXISTS premier_league.dim_team (
-    team_id SERIAL PRIMARY KEY,
-    team_name VARCHAR,
-    stadium_name VARCHAR,
-    city VARCHAR,
-    coach_name VARCHAR
+CREATE TABLE IF NOT EXISTS premier_league.dim_club (
+    club_id SERIAL PRIMARY KEY,
+    club_name VARCHAR,
+    stadium_name VARCHAR
 );
-CREATE INDEX IF NOT EXISTS idx_team_id ON premier_league.dim_team(team_id);
+CREATE INDEX IF NOT EXISTS idx_club_id ON premier_league.dim_club(club_id);
 --------------------
 --DONE BY MAHMOUD
 CREATE TABLE IF NOT EXISTS premier_league.dim_player (
@@ -71,25 +69,25 @@ CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.fact_player_perf
 --Georges
 CREATE TABLE IF NOT EXISTS premier_league.fact_game_results (
     match_id INT PRIMARY KEY REFERENCES premier_league.dim_match(match_id),
-    score
-    home_team_goals
-    away_team_goals
-    home_possession
-    away_possession
-    home_shots
-    away_shots
-    home_shots_on_target
-    away_shots_on_target
-    home_fouls
-    away_fouls
-    home_yellow_cards
-    away_yellow_cards
-    home_red_cards
-    away_red_cards
-    extra_time
-    attendance
+    score VARCHAR,
+    home_team_goals INT,
+    away_team_goals INT,
+    home_possession FLOAT,
+    away_possession FLOAT,
+    home_shots INT,
+    away_shots INT,
+    home_shots_on_target INT,
+    away_shots_on_target INT,
+    home_fouls INT,
+    away_fouls INT,
+    home_yellow_cards INT,
+    away_yellow_cards INT,
+    home_red_cards INT,
+    away_red_cards INT
+    -- extra_time
+    -- attendance
 );
-CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.fact_game_results(match_id);
+CREATE INDEX IF NOT EXISTS idx_match_id ON premier_league.fact_game_results(match_id);
 --------------------
 --Mahmoud
 CREATE TABLE IF NOT EXISTS premier_league.fact_competition_results (
