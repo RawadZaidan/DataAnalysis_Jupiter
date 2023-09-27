@@ -2,7 +2,7 @@ from lookups import ErrorHandling, READURLS
 from logging_handler import show_error_message
 from pandas_handler import process_net_transfer_record, drop_nulls, fill_nulls
 import pandas as pd
-from misc_handler import read_csv_files_from_drive
+import misc_handler
 
 #Function to clean clubs df
 def clean_clubs_function(df):
@@ -22,16 +22,18 @@ def clean_clubs_function(df):
 #Function to clean player valuations df
 def clean_player_valuations_function(df):
     try:
-        columns_to_show = ['player_id','last_season','date','market_value_in_eur','current_club_id','player_club_domestic_competition_id']
+        columns_to_show = ['player_id', 'last_season', 'date', 'market_value_in_eur', 'current_club_id', 'player_club_domestic_competition_id']
         df = df[columns_to_show]
-        df['date'] = pd.to_datetime(df['date'])
+
+        df['date'] = pd.to_datetime(df['date'], errors='coerce')  
         df = df.loc[(df['player_club_domestic_competition_id'] == 'GB1') & 
-                    (df['date'] >= pd.to_datetime('2018-08-10')) & 
+                    (df['date'] >= pd.to_datetime('2018-08-10')) &  
                     (df['last_season'] >= 2018) &
                     ((df['last_season'] == df['date'].dt.year) | (df['last_season'] == (df['date'].dt.year - 1)))]
-        df = df.sort_values(by='date', ascending=True)
         df.rename(columns={'player_club_domestic_competition_id': 'competition_id'}, inplace=True)
+        df = df.sort_values(by='date', ascending=True)
         df.reset_index(inplace=True, drop=True)
+
         return df
     except Exception as e:
         error_string_prefix = ErrorHandling.PLAYERVALUATIONS_ERROR.value
@@ -50,7 +52,7 @@ def clean_players_function(df):
         df.reset_index(inplace=True, drop=True)
         return df
     except Exception as e:
-        error_string_prefix = ErrorHandling.PLAYERVALUATIONS_ERROR.value
+        error_string_prefix = ErrorHandling.PLAYERS_ERROR.value
         error_string_suffix = str(e)
         show_error_message(error_string_prefix, error_string_suffix)
 
@@ -78,23 +80,25 @@ def clean_games_function(df):
         return filtered_df
     
     except Exception as e:
-        error_string_prefix = ErrorHandling.CLUBS_ERROR.value
+        error_string_prefix = ErrorHandling.GAMES_ERROR.value
         error_string_suffix = str(e)
         show_error_message(error_string_prefix, error_string_suffix)
 
 def clean_games_events_function(df):
     try: 
-        df_games = read_csv_files_from_drive(READURLS.Games.value)
+        df_games = misc_handler.read_csv_files_from_drive(READURLS.Games.value)
         df_games=clean_games_function(df_games)  
-        filtered_df =pd.merge(df,df_games[['game_id','competition_id']],on='game_id',how='inner')
-        filtered_df=filtered_df.loc[(filtered_df['competition_id'] == 'GB1')].copy()
-        columns_to_drop = ['competition_id']  # Replace with the actual column names you want to drop
-        filtered_df.drop(columns=columns_to_drop, inplace=True)
+        filtered_df = pd.merge(df,df_games[['game_id','competition_id']],on='game_id',how='left')
+        filtered_df=filtered_df.loc[(filtered_df['competition_id'] == 'GB1')]
+        # columns_to_drop = ['competition_id']  # Replace with the actual column names you want to drop
+        # filtered_df.drop(columns=columns_to_drop, inplace=True)
+        filtered_df['description'].fillna('Substitution', inplace=True)
+        filtered_df['player_in_id'].fillna(0, inplace=True)
         filtered_df.reset_index(inplace=True, drop=True)
         return filtered_df
-    
+        
     except Exception as e:
-        error_string_prefix = ErrorHandling.CLUBS_ERROR.value
+        error_string_prefix = ErrorHandling.GAMES_EVENTS_ERROR.value
         error_string_suffix = str(e)
         show_error_message(error_string_prefix, error_string_suffix)
 
@@ -106,7 +110,7 @@ def clean_competitions_function(df):
         return df
     
     except Exception as e:
-        error_string_prefix = ErrorHandling.CLUBS_ERROR.value
+        error_string_prefix = ErrorHandling.COMPETITIONS_ERROR.value
         error_string_suffix = str(e)
         show_error_message(error_string_prefix, error_string_suffix)
 
@@ -119,6 +123,6 @@ def clean_appearances_function(df):
         return df
     
     except Exception as e:
-        error_string_prefix = ErrorHandling.CLUBS_ERROR.value
+        error_string_prefix = ErrorHandling.APPEARANCES_ERROR.value
         error_string_suffix = str(e)
         show_error_message(error_string_prefix, error_string_suffix)

@@ -18,8 +18,13 @@ class ErrorHandling(Enum):
     PANDAS_NULLS_ERROR = "Error dropping nulls from df"
     PANDAS_FILL_NULLS_ERROR="Error replacing nulls from df"
     RETURN_NET_TRASNFER_ERROR = "Error handling net transfer fee"
-    CLUBS_ERROR = "Error cleaning clubs csv"
+    PLAYERS_ERROR = "Error cleaning players csv"
     PLAYERVALUATIONS_ERROR = "Error cleaning player valuations csv"
+    GAMES_ERROR = "Error cleaning games csv"
+    GAMES_EVENTS_ERROR = "Error cleaning games events csv"
+    COMPETITIONS_ERROR = "Error cleaning competitions csv"
+    CLUBS_ERROR = "Error cleaning clubs csv"
+    APPEARANCES_ERROR = "Error cleaning appearances csv"
 
 class InputTypes(Enum):
     SQL = "SQL"
@@ -60,13 +65,13 @@ class SEASONS(Enum):
     S18_19 = [38308,38688]
 
 class URLS(Enum):
-    Players = "https://drive.google.com/uc?id=1I3iBSRKtiIZxHG2yAr9JuYqBNbeGIOlI&export=download"
-    Player_Valuations = "https://drive.google.com/uc?id=1Q1Dw7th4SxyR4OLQdo6M2tt6NRhYE7DE&export=download"
-    Games = "https://drive.google.com/uc?id=1wEj6Tli0RKy7WsH6PydeWTdZTYx6iNsw&export=download"
-    Games_Events = "https://drive.google.com/uc?id=1J-5WbdIHZy_hRQMOjlc5N55iUTE5NxMu&export=download"
-    Competitions = "https://drive.google.com/uc?id=1FdewVTkWwUxjyTGbKFRjNMigSiJxw3Nq&export=download"
-    Clubs = "https://drive.google.com/uc?id=1SD96aMVyrScGeUTSsCyd58mT9fjS5eFW&export=download"
-    Appearances = "https://drive.google.com/uc?id=1nmK10IgDtTEIc1oC8zIt0w8aQDNleIKh&export=download"
+    Players= "https://drive.google.com/uc?id=1I3iBSRKtiIZxHG2yAr9JuYqBNbeGIOlI&export=download"
+    Player_Valuations= "https://drive.google.com/uc?id=1Q1Dw7th4SxyR4OLQdo6M2tt6NRhYE7DE&export=download"
+    Games= "https://drive.google.com/uc?id=1wEj6Tli0RKy7WsH6PydeWTdZTYx6iNsw&export=download"
+    Games_Events= "https://drive.google.com/uc?id=1J-5WbdIHZy_hRQMOjlc5N55iUTE5NxMu&export=download"
+    Competitions= "https://drive.google.com/uc?id=1FdewVTkWwUxjyTGbKFRjNMigSiJxw3Nq&export=download"
+    Clubs= "https://drive.google.com/uc?id=1SD96aMVyrScGeUTSsCyd58mT9fjS5eFW&export=download"
+    Appearances= "https://drive.google.com/uc?id=1nmK10IgDtTEIc1oC8zIt0w8aQDNleIKh&export=download"
 
 class MAIN_SOURCE_CSV(Enum):
     url = 'https://www.kaggle.com/datasets/davidcariboo/player-scores'
@@ -84,8 +89,8 @@ class match_id(Enum):
 class READURLS(Enum):
     Players = "https://drive.google.com/file/d/1I3iBSRKtiIZxHG2yAr9JuYqBNbeGIOlI/view?usp=drive_link"
     Player_Valuations = "https://drive.google.com/file/d/1Q1Dw7th4SxyR4OLQdo6M2tt6NRhYE7DE/view?usp=drive_link"
-    Games = "https://drive.google.com/file/d/1wEj6Tli0RKy7WsH6PydeWTdZTYx6iNsw/view?usp=drive_link"
-    Games_Events = "https://drive.google.com/file/d/1J-5WbdIHZy_hRQMOjlc5N55iUTE5NxMu/view?usp=drive_link"
+    Games= "https://drive.google.com/file/d/1wEj6Tli0RKy7WsH6PydeWTdZTYx6iNsw/view?usp=drive_link"
+    Games_Events= "https://drive.google.com/file/d/1J-5WbdIHZy_hRQMOjlc5N55iUTE5NxMu/view?usp=drive_link"
     Competitions = "https://drive.google.com/file/d/1FdewVTkWwUxjyTGbKFRjNMigSiJxw3Nq/view?usp=drive_link"
     Clubs = "https://drive.google.com/file/d/1SD96aMVyrScGeUTSsCyd58mT9fjS5eFW/view?usp=drive_link"
     Appearances = "https://drive.google.com/file/d/1nmK10IgDtTEIc1oC8zIt0w8aQDNleIKh/view?usp=drive_link"
