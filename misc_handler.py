@@ -59,8 +59,12 @@ def return_match_df_from_web(first_id,last_id):
         home_team= WebDriverWait(driver, 4).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[1]/div[1]/a[2]/span[1]'))).text
         away_team= WebDriverWait(driver, 4).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[3]/div[1]/a[2]/span[1]'))).text
         score=WebDriverWait(driver, 4).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mainContent"]/div/section[2]/div[2]/section/div/div[2]/div/div[2]/div[1]'))).text
-        home_score = score.split(' -')[0]
-        away_score = score.split('- ')[1]
+        try:
+            home_score = int(score.split(' -')[0])
+            away_score = int(score.split('- ')[1])
+        except:
+            home_score=None
+            away_score=None
         stats= WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="mainContent"]/div/section[2]/div[2]/div/div[1]/div/div/ul/li[3]')))
         driver.execute_script("arguments[0].click();",stats)
         sleep(3)
@@ -102,7 +106,7 @@ def insert_web_into_sql(db_session,source_folder):
     for file in csv_files:
         df=return_data_as_df(file,InputTypes.CSV)
         df=df_web_cleaning(df)
-        insert_statement=return_insert_into_sql_statement_from_df_stg(df,DESTINATION_SCHEMA.DESTINATION_NAME.value,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value)
+        insert_statement=return_insert_into_sql_statement_from_df_stg(df,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value,DESTINATION_SCHEMA.DESTINATION_NAME.value)
         for insert in insert_statement:
             execute_query(db_session=db_session, query= insert)
         

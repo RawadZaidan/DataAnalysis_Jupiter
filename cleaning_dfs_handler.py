@@ -64,6 +64,10 @@ def df_web_cleaning(web_df):
     return_df=drop_nulls(web_df,column=drop_subset)
     return_df=fill_nulls(return_df,column=fill_subset)
     return_df['date']=pd.to_datetime(return_df['date'])
+    # columns=["home_shots_on_target","away_shots_on_target","home_shots","away_shots","home_touches","away_touches","home_passes","away_passes","home_tackles","away_tackles","home_corners","away_corners","home_yellow_cards","away_yellow_cards","home_red_cards","away_red_cards","home_fouls_conceded","away_fouls_conceded"]
+    columns=['home_score','away_score']
+    #return_df[columns] = return_df[columns].astype(str).str.replace('.0', '', regex=False)
+    return_df[columns]=return_df[columns].astype('int64')
     return_df.columns=return_df.columns.str.replace("_%","")
     if return_df.columns[0]=='Unnamed: 0': 
         return_df.pop(return_df.columns[0])

@@ -83,8 +83,8 @@ class WEBSCRAPINGSTAGINGTABLE(Enum):
     STGTABLENAME = "web_stats"
 
 class match_id(Enum):
-    first_run_id_1=66342
-    first_run_id_2=66343
+    first_run_id_1=74926
+    first_run_id_2=74927
 
 class READURLS(Enum):
     Players = "https://drive.google.com/file/d/1I3iBSRKtiIZxHG2yAr9JuYqBNbeGIOlI/view?usp=drive_link"
