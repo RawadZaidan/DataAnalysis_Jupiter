@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS premier_league.fact_player_performance (
     shots_on_goal INT,
     minutes_played INT,
     yellow_cards INT,
-    red_cards INT,
+    red_cards INT
 );
 CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.fact_player_performance(match_id);
 CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.fact_player_performance(player_id);
