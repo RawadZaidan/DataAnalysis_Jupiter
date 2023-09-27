@@ -1,7 +1,8 @@
-from lookups import ErrorHandling
+from lookups import ErrorHandling, READURLS
 from logging_handler import show_error_message
 from pandas_handler import process_net_transfer_record, drop_nulls, fill_nulls
 import pandas as pd
+from misc_handler import read_csv_files_from_drive
 
 #Function to clean clubs df
 def clean_clubs_function(df):
@@ -81,8 +82,9 @@ def clean_games_function(df):
         error_string_suffix = str(e)
         show_error_message(error_string_prefix, error_string_suffix)
 
-def clean_games_events_function_georges(df,df_games):
+def clean_games_events_function(df):
     try: 
+        df_games = read_csv_files_from_drive(READURLS.Games.value)
         df_games=clean_games_function(df_games)  
         filtered_df =pd.merge(df,df_games[['game_id','competition_id']],on='game_id',how='inner')
         filtered_df=filtered_df.loc[(filtered_df['competition_id'] == 'GB1')].copy()
