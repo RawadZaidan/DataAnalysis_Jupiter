@@ -135,6 +135,12 @@ def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
         #Execute Webscraping function (Georges)
         first_time_web_scraping(db_session)
 
+        #Do initial csvs into staging
+
+
+        #Do initial webscraping into staging
+
+
         #Close the connection
         close_connection(db_session)
         

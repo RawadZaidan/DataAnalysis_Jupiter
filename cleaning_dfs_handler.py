@@ -66,7 +66,7 @@ def df_web_cleaning(web_df):
         return_df.pop(return_df.columns[0])
     return return_df
 
-def clean_games_function_georges(df):
+def clean_games_function(df):
     try:    
         filtered_df = df.loc[(df['competition_id'] == 'GB1') & (df['season'] >= 2018)].copy()
         columns_to_drop = ['url']  # Replace with the actual column names you want to drop
@@ -83,13 +83,38 @@ def clean_games_function_georges(df):
 
 def clean_games_events_function_georges(df,df_games):
     try: 
-        df_games=clean_games_function_georges(df_games)  
+        df_games=clean_games_function(df_games)  
         filtered_df =pd.merge(df,df_games[['game_id','competition_id']],on='game_id',how='inner')
         filtered_df=filtered_df.loc[(filtered_df['competition_id'] == 'GB1')].copy()
         columns_to_drop = ['competition_id']  # Replace with the actual column names you want to drop
         filtered_df.drop(columns=columns_to_drop, inplace=True)
         filtered_df.reset_index(inplace=True, drop=True)
         return filtered_df
+    
+    except Exception as e:
+        error_string_prefix = ErrorHandling.CLUBS_ERROR.value
+        error_string_suffix = str(e)
+        show_error_message(error_string_prefix, error_string_suffix)
+
+def clean_competitions_function(df):  
+    try:
+        df = df.loc[
+            (df['competition_id'] == 'GB1') &
+            (df['country_name'] == 'England')]
+        return df
+    
+    except Exception as e:
+        error_string_prefix = ErrorHandling.CLUBS_ERROR.value
+        error_string_suffix = str(e)
+        show_error_message(error_string_prefix, error_string_suffix)
+
+def clean_appearances_function(df):
+    try:
+        df['date'] = pd.to_datetime(df['date'])
+        df = df.loc[
+        (df['date'].dt.year >= 2018) & 
+        (df['competition_id'] == 'GB1')]
+        return df
     
     except Exception as e:
         error_string_prefix = ErrorHandling.CLUBS_ERROR.value

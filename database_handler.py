@@ -1,5 +1,5 @@
 import psycopg2
-from lookups import ErrorHandling, InputTypes
+from lookups import ErrorHandling, InputTypes, DESTINATION_SCHEMA
 from logging_handler import show_error_message
 import pandas as pd
 import pickle
@@ -99,7 +99,7 @@ def return_create_statement_from_df(dataframe,schema_name, table_name):
     create_index_statement = ""
     return create_table_statemnt
 
-def return_create_statement_from_df_stg(dataframe,schema_name, table_name):
+def return_create_statement_from_df_stg(dataframe, table_name, schema_name=DESTINATION_SCHEMA.DESTINATION_NAME.value):
     type_mapping = {
         'int64':'INT',
         'float64':'FLOAT',
@@ -141,7 +141,7 @@ def return_insert_into_sql_statement_from_df(dataframe, schema_name, table_name)
         error_string_suffix = str(e)
         show_error_message(error_string_prefix, error_string_suffix)
 
-def return_insert_into_sql_statement_from_df_stg(dataframe, schema_name, table_name):
+def return_insert_into_sql_statement_from_df_stg(dataframe, table_name, schema_name=DESTINATION_SCHEMA.DESTINATION_NAME.value):
     try:
         columns = ', '.join(dataframe.columns)
         insert_statement_list = []
