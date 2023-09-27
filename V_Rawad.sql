@@ -19,37 +19,43 @@ VALUES
 
 ----------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS premier_league.fact_player_performance (
+    match_date DATE,
     match_id INT REFERENCES premier_league.dim_match(match_id),
     player_id INT PRIMARY KEY REFERENCES premier_league.dim_player(player_id),
     goals_scored INT,
     assists INT,
     shots_on_goal INT,
-    gk_saves INT,
-    passing_accuracy DECIMAL(5, 2),
-    dribbles_completed INT,
-    tackles_made INT,
     minutes_played INT,
-    yellow_card BOOLEAN,
-    red_card BOOLEAN,
+    yellow_cards INT,
+    red_cards INT,
 );
 CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.fact_player_performance(match_id);
 CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.fact_player_performance(player_id);
 
-INSERT INTO premier_league.fact_player_performance
-   (match_id, player_id, goals_scored, assists, shots_on_goal, saves referee_name)
+INSERT INTO premier_league.fact_player_performance (match_id, player_id, goals_scored, assists, shots_on_goal,
+    passing_accuracy, dribbles_completed, tackles_made, minutes_played, yellow_card, red_card)
 SELECT
-   scr_games.game_id,
-   scr_games.date,
-   scr_games.home_club_id,
-   scr_games.away_club_id,
-   scr_games.stadium,
-   scr_games.referee 
-FROM premier_league.stg_games as scr_games
-ON CONFLICT (match_id)
-DO UPDATE SET 
-   match_id = excluded.match_id,
-   match_date = excluded.match_date,
-   home_team_id = excluded.home_team_id,
-   away_team_id = excluded.away_team_id,
-   stadium_name = excluded.stadium_name,
-   referee_name = excluded.referee_name;
+	DATE(scr_games.date) as match_date,
+    scr_games.game_id,
+    scr_appearances.player_id,
+    scr_appearances.goals,
+    scr_appearances.assists,
+    scr_appearances.minutes_played,
+    scr_appearances.yellow_cards,
+    scr_appearances.red_cards
+FROM
+    premier_league.stg_games AS scr_games
+JOIN
+    premier_league.stg_appearances AS scr_appearances
+ON
+    scr_games.game_id = scr_appearances.game_id
+ON CONFLICT (match_id, player_id)
+DO UPDATE SET
+    match_date = excluded.match_date,
+    game_id = excluded.game_id,
+    goals_scored = excluded.goals_scored,
+    assists = excluded.assists,
+    shots_on_goal = excluded.shots_on_goal,
+    minutes_played = excluded.minutes_played,
+    yellow_card = excluded.yellow_cards,
+    red_card = excluded.red_cards;
