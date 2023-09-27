@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS premier_league.dim_player (
     player_id SERIAL PRIMARY KEY,
     player_name VARCHAR,
@@ -30,10 +29,7 @@ DO UPDATE SET
    position = excluded.position,
    price = excluded.price,
    team_id = excluded.team_id;
-
-# excluded key word allows you is used within the context of the 'on conflict' clause when performing an INSERT
-#allows you to reference the values that were in the attempted insertion but were excluded due to a conflict
-
+-----------------------------------------------------
 CREATE TABLE IF NOT EXISTS premier_league.dim_match (
     match_id SERIAL PRIMARY KEY,
     match_date DATE,
