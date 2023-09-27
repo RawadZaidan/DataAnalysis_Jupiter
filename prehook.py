@@ -1,11 +1,12 @@
 import os
-from database_handler import execute_query, create_connection, close_connection,return_data_as_df, return_create_statement_from_df,return_create_statement_from_df_stg
+from database_handler import return_insert_into_sql_statement_from_df_stg, execute_query, create_connection, close_connection,return_data_as_df, return_create_statement_from_df,return_create_statement_from_df_stg
 from lookups import ErrorHandling, PreHookSteps, SQLTablesToReplicate, InputTypes, SourceName, DESTINATION_SCHEMA,match_id,WEBSCRAPINGSTAGINGTABLE, READURLS
 from logging_handler import show_error_message
 from pandas_handler import get_csv_file_names_into_dict, return_paths_dict, clean_clubs_function
 from misc_handler import download_files,return_match_df_from_web, read_csv_files_from_drive
 from database_handler import create_connection
 import pandas as pd
+import misc_handler
 import cleaning_dfs_handler
 
 def first_time_run_download():
@@ -20,6 +21,30 @@ def first_time_web_scraping(db_session):
     create_statement=return_create_statement_from_df_stg(df_web_stg,DESTINATION_SCHEMA.DESTINATION_NAME.value,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value)
     execute_query(db_session,create_statement)
     #first_time
+
+def first_time_csv(db_session):
+    for url in READURLS:
+        print('Working on:', url.name)
+        df = misc_handler.read_csv_files_from_drive(url.value)
+        print('Reading Done of:', url.name)
+
+        tables = {'Players' : cleaning_dfs_handler.clean_players_function,
+            'Player_Valuations' : cleaning_dfs_handler.clean_player_valuations_function,
+            'Games' : cleaning_dfs_handler.clean_games_function,
+            'Games_Events' : cleaning_dfs_handler.clean_games_events_function,
+            'Competitions' : cleaning_dfs_handler.clean_competitions_function,
+            'Clubs' : cleaning_dfs_handler.clean_clubs_function,
+            'Appearances' : cleaning_dfs_handler.clean_appearances_function}
+        
+        df = tables[url.name](df)
+        print('Cleaning done on:', url.name)
+        query = return_create_statement_from_df_stg(df,table_name=url.name)
+        execute_query(db_session=db_session,query=query)
+        print('Done creating stg table of:', url.name)
+        query = return_insert_into_sql_statement_from_df_stg(df,table_name=url.name)
+        print('Inserting into:', url.name)
+        for query_in in query:
+            execute_query(db_session=db_session,query=query_in)
 
 #DONE: Executes the sql folder commands: Creates the schema if it doesn't exist
 def execute_sql_folder(db_session, sql_command_directory_path):
@@ -130,13 +155,13 @@ def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
         execute_sql_folder(db_session, sql_command_directory_path)
 
         #Create staging tables from CSV
-        read_csv_create_stg_into_pg(db_session)
+        first_time_csv(db_session)
         
         #Execute Webscraping function (Georges)
         first_time_web_scraping(db_session)
 
         #Do initial csvs into staging
-
+        
 
         #Do initial webscraping into staging
 
