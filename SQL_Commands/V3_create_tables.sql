@@ -1,3 +1,4 @@
+--Georges
 CREATE TABLE IF NOT EXISTS premier_league.dim_team (
     team_id SERIAL PRIMARY KEY,
     team_name VARCHAR,
@@ -7,6 +8,7 @@ CREATE TABLE IF NOT EXISTS premier_league.dim_team (
 );
 CREATE INDEX IF NOT EXISTS idx_team_id ON premier_league.dim_team(team_id);
 --------------------
+--DONE BY MAHMOUD
 CREATE TABLE IF NOT EXISTS premier_league.dim_player (
     player_id SERIAL PRIMARY KEY,
     player_name VARCHAR,
@@ -19,6 +21,7 @@ CREATE TABLE IF NOT EXISTS premier_league.dim_player (
 
 CREATE INDEX IF NOT EXISTS idx_player_id ON premier_league.dim_player(player_id);
 --------------------
+--DONE BY MAHMOUD
 CREATE TABLE IF NOT EXISTS premier_league.dim_match (
     match_id SERIAL PRIMARY KEY,
     match_date DATE,
@@ -30,6 +33,7 @@ CREATE TABLE IF NOT EXISTS premier_league.dim_match (
 );
 CREATE INDEX IF NOT EXISTS idx_match_id ON premier_league.dim_match(match_id);
 --------------------
+--Rawad
 CREATE TABLE IF NOT EXISTS premier_league.dim_season (
     season_id SERIAL PRIMARY KEY,
     start_date DATE,
@@ -38,6 +42,7 @@ CREATE TABLE IF NOT EXISTS premier_league.dim_season (
 );
 CREATE INDEX IF NOT EXISTS idx_season_id ON premier_league.dim_season(season_id);
 --------------------
+--Mahmoud
 CREATE TABLE IF NOT EXISTS premier_league.dim_competition (
     competition_id SERIAL PRIMARY KEY,
     competition_name VARCHAR,
@@ -46,6 +51,7 @@ CREATE TABLE IF NOT EXISTS premier_league.dim_competition (
 );
 CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.dim_competition(competition_id);
 --------------------
+--Rawad
 CREATE TABLE IF NOT EXISTS premier_league.fact_player_performance (
     match_id INT REFERENCES premier_league.dim_match(match_id),
     player_id INT PRIMARY KEY REFERENCES premier_league.dim_player(player_id),
@@ -62,17 +68,30 @@ CREATE TABLE IF NOT EXISTS premier_league.fact_player_performance (
 CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.fact_player_performance(match_id);
 CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.fact_player_performance(player_id);
 --------------------
+--Georges
 CREATE TABLE IF NOT EXISTS premier_league.fact_game_results (
     match_id INT PRIMARY KEY REFERENCES premier_league.dim_match(match_id),
-    home_team_score INT,
-    away_team_score INT,
-    home_team_goals INT,
-    away_team_goals INT,
-    game_duration_minutes INT,
-    attendance INT
+    score
+    home_team_goals
+    away_team_goals
+    home_possession
+    away_possession
+    home_shots
+    away_shots
+    home_shots_on_target
+    away_shots_on_target
+    home_fouls
+    away_fouls
+    home_yellow_cards
+    away_yellow_cards
+    home_red_cards
+    away_red_cards
+    extra_time
+    attendance
 );
 CREATE INDEX IF NOT EXISTS idx_competition_id ON premier_league.fact_game_results(match_id);
 --------------------
+--Mahmoud
 CREATE TABLE IF NOT EXISTS premier_league.fact_competition_results (
     competition_id INT PRIMARY KEY REFERENCES premier_league.dim_competition(competition_id),
     season_id INT REFERENCES premier_league.dim_season(season_id),
