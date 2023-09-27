@@ -95,26 +95,26 @@ def create_sql_staging_tables(db_session, source_name):
         return staging_query
 
 #DONE: Executes prehook
-def execute_prehook(sql_command_directory_path='./SQL_Commands'):
-    step_name = ""
-    db_session = None
-    try:
-        step_name = "DB CONNECTION ERROR"
-        db_session = create_connection()
-        step_name = "SQL FOLDER ERROR"
-        execute_sql_folder(db_session, sql_command_directory_path) 
-        step_name = "SQL TABLES CREATION ERROR"
-        create_sql_staging_tables(db_session, SourceName.DVD_RENTAL)
-        step_name = "CLOSING CONNECTION ERROR"
-        close_connection(db_session)
-    except Exception as error:
-        suffix = str(error)
-        error_prefix = ErrorHandling.PREHOOK_SQL_ERROR
-        show_error_message(error_prefix.value, suffix)
-        raise Exception(f"Important Step Failed step = {step_name}")
-    finally:
-        if db_session:
-            close_connection(db_session)
+# def execute_prehook(sql_command_directory_path='./SQL_Commands'):
+#     step_name = ""
+#     db_session = None
+#     try:
+#         step_name = "DB CONNECTION ERROR"
+#         db_session = create_connection()
+#         step_name = "SQL FOLDER ERROR"
+#         execute_sql_folder(db_session, sql_command_directory_path) 
+#         step_name = "SQL TABLES CREATION ERROR"
+#         create_sql_staging_tables(db_session, SourceName.DVD_RENTAL)
+#         step_name = "CLOSING CONNECTION ERROR"
+#         close_connection(db_session)
+#     except Exception as error:
+#         suffix = str(error)
+#         error_prefix = ErrorHandling.PREHOOK_SQL_ERROR
+#         show_error_message(error_prefix.value, suffix)
+#         raise Exception(f"Important Step Failed step = {step_name}")
+#     finally:
+#         if db_session:
+#             close_connection(db_session)
 
 def create_stg_tables_from_csv(db_session):
     dict_csvs = get_csv_file_names_into_dict()
@@ -146,7 +146,7 @@ def read_csv_create_stg_into_pg_clean(db_session):
         query = return_create_statement_from_df_stg(df, schema_name=DESTINATION_SCHEMA.DESTINATION_NAME.value, table_name=url.name)
         execute_query(db_session=db_session, query=query)   
 
-def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
+def execute_prehook(sql_command_directory_path='./SQL_Commands'):
     try:
         #Create connection to PG
         db_session = create_connection()
@@ -154,17 +154,11 @@ def new_execute_prehook(sql_command_directory_path='./SQL_Commands'):
         #Execute Sql file: New schema 
         execute_sql_folder(db_session, sql_command_directory_path)
 
-        #Create staging tables from CSV
+        #Create staging tables with first time runs from CSV
         first_time_csv(db_session)
         
         #Execute Webscraping function (Georges)
         first_time_web_scraping(db_session)
-
-        #Do initial csvs into staging
-        
-
-        #Do initial webscraping into staging
-
 
         #Close the connection
         close_connection(db_session)
