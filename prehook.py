@@ -9,10 +9,10 @@ import pandas as pd
 import misc_handler
 import cleaning_dfs_handler
 
-def first_time_run_download():
-    db_session = create_connection()
-    download_files()
-    create_stg_tables_from_csv(db_session)
+# def first_time_run_download():
+#     db_session = create_connection()
+#     download_files()
+#     create_stg_tables_from_csv(db_session)
 
 def first_time_web_scraping(db_session):
     df_web_stg=return_match_df_from_web(match_id.first_run_id_1.value,match_id.first_run_id_2.value)
