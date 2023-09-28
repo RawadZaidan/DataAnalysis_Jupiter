@@ -1,4 +1,4 @@
----TODO
+---TODO -- TO GET FROM NEW TABLE OF ALL THE SEASONS PREVIOUSLY
 CREATE TABLE IF NOT EXISTS premier_league.fact_competition_results (
     competition_id INT,
     season_id INT PRIMARY KEY REFERENCES premier_league.dim_season(season_id),
