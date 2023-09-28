@@ -17,8 +17,8 @@ def first_time_run_download():
 def first_time_web_scraping(db_session):
     df_web_stg=return_match_df_from_web(match_id.first_run_id_1.value,match_id.first_run_id_2.value)
     df_web_stg['date']=pd.to_datetime(df_web_stg['date'])
-    # columns=["home_shots_on_target","away_shots_on_target","home_shots","away_shots","home_touches","away_touches","home_passes","away_passes","home_tackles","away_tackles","home_corners","away_corners","home_yellow_cards","away_yellow_cards","home_red_cards","away_red_cards","home_fouls_conceded","away_fouls_conceded"]
-    # df_web_stg[columns]=df_web_stg[columns].astype('int64')
+    columns=["home_shots_on_target","away_shots_on_target","home_shots","away_shots","home_touches","away_touches","home_passes","away_passes","home_tackles","away_tackles","home_corners","away_corners","home_yellow_cards","away_yellow_cards","home_red_cards","away_red_cards","home_fouls_conceded","away_fouls_conceded"]
+    df_web_stg[columns]=df_web_stg[columns].astype('int64')
     df_web_stg.columns=df_web_stg.columns.str.replace("_%","")
     create_statement=return_create_statement_from_df_stg(df_web_stg,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value,DESTINATION_SCHEMA.DESTINATION_NAME.value)
     execute_query(db_session,create_statement)

@@ -26,16 +26,16 @@ CREATE TABLE IF NOT EXISTS premier_league.fact_game_results (
     away_team_goals INT,
     home_possession FLOAT,
     away_possession FLOAT,
-    home_shots FLOAT,
-    away_shots FLOAT,
-    home_shots_on_target FLOAT,
-    away_shots_on_target FLOAT,
-    home_fouls FLOAT,
-    away_fouls FLOAT,
-    home_yellow_cards FLOAT,
-    away_yellow_cards FLOAT,
-    home_red_cards FLOAT,
-    away_red_cards FLOAT
+    home_shots INT,
+    away_shots INT,
+    home_shots_on_target INT,
+    away_shots_on_target INT,
+    home_fouls INT,
+    away_fouls INT,
+    home_yellow_cards INT,
+    away_yellow_cards INT,
+    home_red_cards INT,
+    away_red_cards INT
     -- extra_time
     -- attendance
 );
