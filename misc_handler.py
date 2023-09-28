@@ -109,3 +109,20 @@ def insert_web_into_sql(db_session,source_folder):
         insert_statement=return_insert_into_sql_statement_from_df_stg(df,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value,DESTINATION_SCHEMA.DESTINATION_NAME.value)
         for insert in insert_statement:
             execute_query(db_session=db_session, query= insert)
+
+
+def return_standings_df_from_web():
+    driver = webdriver.Chrome()
+    options=Options()
+    options.add_argument('--headless')
+    driver = webdriver.Chrome(options=options)
+    url='https://www.premierleague.com/tables'
+    driver.get(url)
+    sleep(3)
+    table_df=pd.read_html(driver.page_source)
+    table_df=table_df[0].iloc[::2]
+    standings=table_df.copy()
+    standings['Position']=table_df['Position'].astype(str).str[:2]
+    standings.drop(columns=['Form','Next','More'],inplace=True)
+    standings.reset_index()
+    return standings
