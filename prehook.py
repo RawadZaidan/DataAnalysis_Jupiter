@@ -22,7 +22,7 @@ def first_time_web_scraping(db_session):
     df_web_stg.columns=df_web_stg.columns.str.replace("_%","")
     create_statement=return_create_statement_from_df_stg(df_web_stg,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value,DESTINATION_SCHEMA.DESTINATION_NAME.value)
     execute_query(db_session,create_statement)
-    #first_time
+
 
 def first_time_csv(db_session):
     for url in READURLS:

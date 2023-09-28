@@ -109,6 +109,3 @@ def insert_web_into_sql(db_session,source_folder):
         insert_statement=return_insert_into_sql_statement_from_df_stg(df,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value,DESTINATION_SCHEMA.DESTINATION_NAME.value)
         for insert in insert_statement:
             execute_query(db_session=db_session, query= insert)
-        
-    
-
