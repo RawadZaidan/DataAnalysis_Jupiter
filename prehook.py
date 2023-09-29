@@ -162,9 +162,15 @@ def execute_prehook(sql_command_directory_path='./SQL_Commands'):
         #Execute Webscraping function (Georges)
         first_time_web_scraping(db_session)
 
+        #DONT EXECUTE: Execute all seasons readings and insert into pg 
+        #
+
+        #RAWAD : Execute first time standings function and into pg
+        
+
         #Close the connection
         close_connection(db_session)
-        
+
     except Exception as error:
         suffix = str(error)
         error_prefix = ErrorHandling.PREHOOK_SQL_ERROR

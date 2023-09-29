@@ -47,6 +47,9 @@ class ETLStep(Enum):
 class DESTINATION_SCHEMA(Enum):
     DESTINATION_NAME = "premier_league"
 
+class HOOKSEASONS(Enum):
+    S23_24 = []
+
 class SEASONS(Enum):
     S22_23 = [74911,75290]
     S21_22 = [66342,66721]

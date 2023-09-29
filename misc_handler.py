@@ -100,6 +100,8 @@ def return_match_df_from_web(first_id,last_id):
     driver.quit()
     return match_df
 
+#Function to read all seasons from ranges class and isert into pg
+
 
 def insert_web_into_sql(db_session,source_folder):
     csv_files=find_csv_files(source_folder)
