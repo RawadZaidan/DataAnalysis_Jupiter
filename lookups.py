@@ -87,3 +87,11 @@ class READURLS(Enum):
     Competitions = "https://drive.google.com/file/d/1FdewVTkWwUxjyTGbKFRjNMigSiJxw3Nq/view?usp=drive_link"
     Clubs = "https://drive.google.com/file/d/1SD96aMVyrScGeUTSsCyd58mT9fjS5eFW/view?usp=drive_link"
     Appearances = "https://drive.google.com/file/d/1nmK10IgDtTEIc1oC8zIt0w8aQDNleIKh/view?usp=drive_link"
+
+class STANDINGS_SEASONS(Enum):
+    Season_2023 = 'https://www.premierleague.com/tables'
+    Season_2022 = 'https://www.premierleague.com/tables?co=1&se=489&ha=-1'
+    Season_2021 = 'https://www.premierleague.com/tables?co=1&se=418&ha=-1'
+    Season_2020 = 'https://www.premierleague.com/tables?co=1&se=363&ha=-1'
+    Season_2019 = 'https://www.premierleague.com/tables?co=1&se=274&ha=-1'
+    Season_2018 = 'https://www.premierleague.com/tables?co=1&se=210&ha=-1'

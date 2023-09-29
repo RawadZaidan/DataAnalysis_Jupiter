@@ -99,7 +99,7 @@ VALUES
     (2022, '2022-08-01', '2023-05-31', 'Premier League'),
     (2023, '2023-08-01', '2024-05-31', 'Premier League');
 
--- fact_game_results
+-- fact_game_results -- ADD team names, date 
 CREATE TABLE IF NOT EXISTS premier_league.fact_game_results (
     match_id INT PRIMARY KEY ,
     score VARCHAR,

@@ -10,7 +10,7 @@ from time import sleep
 from datetime import datetime
 import pandas as pd
 from pandas_handler import drop_nulls,fill_nulls
-from lookups import CSV_FOLDER_PATH,InputTypes,DESTINATION_SCHEMA,WEBSCRAPINGSTAGINGTABLE
+from lookups import  CSV_FOLDER_PATH,InputTypes,DESTINATION_SCHEMA,WEBSCRAPINGSTAGINGTABLE, STANDINGS_SEASONS
 from database_handler import return_data_as_df,return_insert_into_sql_statement_from_df_stg,execute_query
 from cleaning_dfs_handler import df_web_cleaning
 
@@ -134,3 +134,42 @@ def return_standings_df_from_web():
     standings.reset_index()
     standings['Club'] = standings['Club'].apply(remove_suffix)
     return standings
+
+def return_all_standings_df_from_web():
+    driver = webdriver.Chrome()
+    options=Options()
+    options.add_argument('--headless')
+    driver = webdriver.Chrome(options=options)
+    url='https://www.premierleague.com/tables'
+    driver.get(url)
+    sleep(10)
+    table_df=pd.read_html(driver.page_source)
+    table_df=table_df[0].iloc[::2]
+    standings=table_df.copy()
+    standings['Position']=table_df['Position'].astype(str).str[:2]
+    standings.drop(columns=['Form','Next','More'],inplace=True)
+    standings.reset_index()
+    standings['Club'] = standings['Club'].apply(remove_suffix)
+    return standings
+
+def return_all_seasons_standings_df_from_web():
+    driver = webdriver.Chrome()
+    options=Options()
+    options.add_argument('--headless')
+    driver = webdriver.Chrome(options=options)
+    url= STANDINGS_SEASONS.Season_2023.value
+    concatenated_df = None
+    for season in STANDINGS_SEASONS:
+        url= season.value
+        driver.get(url)
+        sleep(10)
+        table_df=pd.read_html(driver.page_source)
+        table_df=table_df[0].iloc[::2]
+        standings=table_df.copy()
+        standings['Position']=table_df['Position'].astype(str).str[:2]
+        standings.drop(columns=['Form','Next','More'],inplace=True)
+        standings.reset_index()
+        standings['Club'] = standings['Club'].apply(remove_suffix)
+        standings['Season'] = season.name[-4:]
+        concatenated_df = pd.concat([concatenated_df, standings], axis=0, ignore_index=True)
+    return concatenated_df

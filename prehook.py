@@ -1,8 +1,8 @@
 import os
 from database_handler import return_insert_into_sql_statement_from_df_stg, execute_query, create_connection, close_connection,return_data_as_df, return_create_statement_from_df,return_create_statement_from_df_stg
-from lookups import ErrorHandling, PreHookSteps, SQLTablesToReplicate, InputTypes, SourceName, DESTINATION_SCHEMA,match_id,WEBSCRAPINGSTAGINGTABLE, READURLS
+from lookups import ErrorHandling, PreHookSteps,  InputTypes,  DESTINATION_SCHEMA,match_id,WEBSCRAPINGSTAGINGTABLE, READURLS
 from logging_handler import show_error_message
-from pandas_handler import get_csv_file_names_into_dict, return_paths_dict
+from pandas_handler import get_csv_file_names_into_dict, return_paths_dict, remove_spaces_from_columns_df
 from misc_handler import download_files,return_match_df_from_web, read_csv_files_from_drive
 from database_handler import create_connection
 import pandas as pd
@@ -65,36 +65,36 @@ def execute_sql_folder(db_session, sql_command_directory_path):
         show_error_message(error_prefix.value, suffix)
 
 #DONE: Returnes list of tables in the schema/source that i want to include in my Hook
-def return_tables_by_schema(schema_name):
-    schema_tables = list()
-    tables = [table.value for table in SQLTablesToReplicate]
-    for table in tables:
-        if table.split('.')[0] == schema_name:
-            schema_tables.append(table.split('.')[1])
-    return schema_tables
+# def return_tables_by_schema(schema_name):
+#     schema_tables = list()
+#     tables = [table.value for table in SQLTablesToReplicate]
+#     for table in tables:
+#         if table.split('.')[0] == schema_name:
+#             schema_tables.append(table.split('.')[1])
+#     return schema_tables
 
 #DONE: Create the index for the staging tables if it doesn't exist
 def create_sql_staging_table_index(db_session,source_name, table_name, index_val):
     query = f"CREATE INDEX IF NOT EXISTS idx_{table_name}_{index_val} ON {source_name}.{table_name} ({index_val});"
     execute_query(db_session,query)
 
-#DONE: Gets names of SQL tables to replicate from SQLTABLESTOREPLICATE and Creates the staging Tables
-def create_sql_staging_tables(db_session, source_name):
-    try:
-        source_name = source_name.value
-        tables = return_tables_by_schema(source_name)
-        for table in tables:
-            staging_query = f"""
-                    SELECT * FROM {source_name}.{table} LIMIT 1
-            """
-            staging_df = return_data_as_df(db_session= db_session, input_type= InputTypes.SQL, file_executor= staging_query)
-            columns = list(staging_df.columns)
-            dst_table = f"stg_{source_name}_{table}"
-            create_stmt = return_create_statement_from_df(staging_df, DESTINATION_SCHEMA.DESTINATION_NAME.value, dst_table)
-            execute_query(db_session=db_session, query= create_stmt)
-            create_sql_staging_table_index(db_session, DESTINATION_SCHEMA.DESTINATION_NAME.value, dst_table, columns[0])
-    except Exception as error:
-        return staging_query
+# #DONE: Gets names of SQL tables to replicate from SQLTABLESTOREPLICATE and Creates the staging Tables
+# def create_sql_staging_tables(db_session, source_name):
+#     try:
+#         source_name = source_name.value
+#         tables = return_tables_by_schema(source_name)
+#         for table in tables:
+#             staging_query = f"""
+#                     SELECT * FROM {source_name}.{table} LIMIT 1
+#             """
+#             staging_df = return_data_as_df(db_session= db_session, input_type= InputTypes.SQL, file_executor= staging_query)
+#             columns = list(staging_df.columns)
+#             dst_table = f"stg_{source_name}_{table}"
+#             create_stmt = return_create_statement_from_df(staging_df, DESTINATION_SCHEMA.DESTINATION_NAME.value, dst_table)
+#             execute_query(db_session=db_session, query= create_stmt)
+#             create_sql_staging_table_index(db_session, DESTINATION_SCHEMA.DESTINATION_NAME.value, dst_table, columns[0])
+#     except Exception as error:
+#         return staging_query
 
 #DONE: Executes prehook
 # def execute_prehook(sql_command_directory_path='./SQL_Commands'):
@@ -148,6 +148,17 @@ def read_csv_create_stg_into_pg_clean(db_session):
         query = return_create_statement_from_df_stg(df, schema_name=DESTINATION_SCHEMA.DESTINATION_NAME.value, table_name=url.name)
         execute_query(db_session=db_session, query=query)   
 
+def insert_standings_into_stg(db_session):
+    df = misc_handler.return_all_seasons_standings_df_from_web()
+    df = remove_spaces_from_columns_df(df)
+    query = return_create_statement_from_df_stg(df,table_name='standings')
+    execute_query(db_session=db_session,query=query)
+    print('Done creating stg table of:', 'standings')
+    query = return_insert_into_sql_statement_from_df_stg(df,table_name='standings')
+    print('Inserting into:', 'standings')
+    for query_in in query:
+        execute_query(db_session=db_session,query=query_in)
+
 def execute_prehook(sql_command_directory_path='./SQL_Commands'):
     try:
         #Create connection to PG
@@ -166,7 +177,7 @@ def execute_prehook(sql_command_directory_path='./SQL_Commands'):
         #
 
         #RAWAD : Execute first time standings function and into pg
-        
+        insert_standings_into_stg(db_session)
 
         #Close the connection
         close_connection(db_session)
