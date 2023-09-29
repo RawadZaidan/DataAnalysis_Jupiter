@@ -1,6 +1,6 @@
 import os
 import requests
-from lookups import URLS
+from lookups import URLS,SEASONS
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
@@ -11,7 +11,7 @@ from datetime import datetime
 import pandas as pd
 from pandas_handler import drop_nulls,fill_nulls
 from lookups import CSV_FOLDER_PATH,InputTypes,DESTINATION_SCHEMA,WEBSCRAPINGSTAGINGTABLE
-from database_handler import return_data_as_df,return_insert_into_sql_statement_from_df_stg,execute_query
+from database_handler import return_data_as_df,return_insert_into_sql_statement_from_df_stg,execute_query,return_create_statement_from_df_stg
 from cleaning_dfs_handler import df_web_cleaning
 
 def read_csv_files_from_drive(url):
@@ -101,6 +101,17 @@ def return_match_df_from_web(first_id,last_id):
     return match_df
 
 #Function to read all seasons from ranges class and isert into pg
+def read_seasons_into_sql(db_session):
+    return_df=pd.DataFrame()
+    for season in SEASONS:
+        df=return_match_df_from_web(season.value[0],season.value[1])
+        return_df=pd.concat((return_df,df),axis=0,ignore_index=True)
+    return_df=df_web_cleaning(return_df)
+    create_statement=return_create_statement_from_df_stg(return_df,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value,DESTINATION_SCHEMA.DESTINATION_NAME.value)
+    execute_query(db_session,create_statement)
+    insert_statement=return_insert_into_sql_statement_from_df_stg(return_df,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value,DESTINATION_SCHEMA.DESTINATION_NAME.value)
+    for insert in insert_statement:
+        execute_query(db_session=db_session, query= insert)
 
 
 def insert_web_into_sql(db_session,source_folder):
