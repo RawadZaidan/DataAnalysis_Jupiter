@@ -18,20 +18,39 @@
 -- GROUP BY type,minute
 -- ORDER Bycount(club_id) DESC
 
-SELECT CASE
-        WHEN home_club_position > away_club_position
-		AND home_club_goals > away_club_goals
-		THEN 'Weak team won'
-		WHEN home_club_position > away_club_position
-		AND home_club_goals < away_club_goals
-		THEN 'Strong team won'
-		WHEN home_club_position < away_club_position
-		AND home_club_goals > away_club_goals
-		THEN 'Strong team won'
-		WHEN home_club_position < away_club_position
-		AND home_club_goals < away_club_goals
-		THEN 'Weak team won'
-        ELSE 'Draw'
-    END AS winner,
-*  FROM premier_league.stg_games
-ORDER BY season, round
+-- WeakVsStrong result
+-- SELECT CASE
+--         WHEN home_club_position > away_club_position
+-- 		AND home_club_goals > away_club_goals
+-- 		THEN 'Weak team won'
+-- 		WHEN home_club_position > away_club_position
+-- 		AND home_club_goals < away_club_goals
+-- 		THEN 'Strong team won'
+-- 		WHEN home_club_position < away_club_position
+-- 		AND home_club_goals > away_club_goals
+-- 		THEN 'Strong team won'
+-- 		WHEN home_club_position < away_club_position
+-- 		AND home_club_goals < away_club_goals
+-- 		THEN 'Weak team won'
+--         ELSE 'Draw'
+--     END AS winner,
+-- *  FROM premier_league.stg_games
+-- ORDER BY season, round
+
+--TEAM WINNING CHANCE
+WITH history AS 
+(SELECT season, round, date, home_club_name, away_club_name, aggregate, 
+    CASE 
+        WHEN home_club_goals > away_club_goals THEN home_club_name
+        WHEN home_club_goals < away_club_goals THEN away_club_name
+        ELSE 'Draw' 
+    END AS Result
+FROM premier_league.stg_games 
+WHERE (away_club_name = 'Chelsea FC' AND home_club_name = 'Arsenal FC') 
+    OR (away_club_name = 'Arsenal FC' AND home_club_name = 'Chelsea FC'))
+	
+SELECT result,
+		COUNT(result)
+FROM history
+GROUP BY result
+
