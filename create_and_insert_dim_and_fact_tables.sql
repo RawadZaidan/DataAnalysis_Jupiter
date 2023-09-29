@@ -218,11 +218,3 @@ DO UPDATE SET
     minutes_played = excluded.minutes_played,
     yellow_cards = excluded.yellow_cards, 
     red_cards = excluded.red_cards; 
-
-
-
-
-
-
-
-

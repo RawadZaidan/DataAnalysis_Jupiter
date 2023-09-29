@@ -3,7 +3,7 @@ from database_handler import return_insert_into_sql_statement_from_df_stg, execu
 from lookups import ErrorHandling, PreHookSteps,  InputTypes,  DESTINATION_SCHEMA,match_id,WEBSCRAPINGSTAGINGTABLE, READURLS
 from logging_handler import show_error_message
 from pandas_handler import get_csv_file_names_into_dict, return_paths_dict, remove_spaces_from_columns_df
-from misc_handler import download_files,return_match_df_from_web, read_csv_files_from_drive
+from misc_handler import read_seasons_into_sql, download_files,return_match_df_from_web, read_csv_files_from_drive
 from database_handler import create_connection
 import pandas as pd
 import misc_handler
@@ -174,7 +174,7 @@ def execute_prehook(sql_command_directory_path='./SQL_Commands'):
         first_time_web_scraping(db_session)
 
         #DONT EXECUTE: Execute all seasons readings and insert into pg 
-        #
+        read_seasons_into_sql(db_session)
 
         #RAWAD : Execute first time standings function and into pg
         insert_standings_into_stg(db_session)
