@@ -158,7 +158,7 @@ def return_all_standings_df_from_web():
     table_df=table_df[0].iloc[::2]
     standings=table_df.copy()
     standings['Position']=table_df['Position'].astype(str).str[:2]
-    standings.drop(columns=['Form','Next','More'],inplace=True)
+    standings.drop(columns=['Unnamed: 10','Unnamed: 11','Unnamed: 12'],inplace=True)
     standings.reset_index()
     standings['Club'] = standings['Club'].apply(remove_suffix)
     return standings
@@ -168,7 +168,6 @@ def return_all_seasons_standings_df_from_web():
     options=Options()
     options.add_argument('--headless')
     driver = webdriver.Chrome(options=options)
-    url= STANDINGS_SEASONS.Season_2023.value
     concatenated_df = None
     for season in STANDINGS_SEASONS:
         url= season.value
@@ -178,7 +177,8 @@ def return_all_seasons_standings_df_from_web():
         table_df=table_df[0].iloc[::2]
         standings=table_df.copy()
         standings['Position']=table_df['Position'].astype(str).str[:2]
-        standings.drop(columns=['Form','Next','More'],inplace=True)
+        standings.drop(columns=['Unnamed: 10','Unnamed: 11','Unnamed: 12'],inplace=True)
+        sleep(5)
         standings.reset_index()
         standings['Club'] = standings['Club'].apply(remove_suffix)
         standings['Season'] = season.name[-4:]
