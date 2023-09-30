@@ -65,13 +65,13 @@ def execute_sql_folder(db_session, sql_command_directory_path):
         show_error_message(error_prefix.value, suffix)
 
 #DONE: Returnes list of tables in the schema/source that i want to include in my Hook
-def return_tables_by_schema(schema_name):
-    schema_tables = list()
-    tables = [table.value for table in SQLTablesToReplicate]
-    for table in tables:
-        if table.split('.')[0] == schema_name:
-            schema_tables.append(table.split('.')[1])
-    return schema_tables
+# def return_tables_by_schema(schema_name):
+#     schema_tables = list()
+#     tables = [table.value for table in SQLTablesToReplicate]
+#     for table in tables:
+#         if table.split('.')[0] == schema_name:
+#             schema_tables.append(table.split('.')[1])
+#     return schema_tables
 
 #DONE: Create the index for the staging tables if it doesn't exist
 def create_sql_staging_table_index(db_session,source_name, table_name, index_val):
