@@ -14,10 +14,12 @@ import pandas as pd
 
 def create_etl_checkpoint(db_session):
     schema_destination_table = DESTINATION_SCHEMA.DESTINATION_NAME.value
+    execute_query(db_session, query)
     query = f"""
         CREATE TABLE IF NOT EXISTS {schema_destination_table}.etl_checkpoint
         (
-            etl_last_run_index INT
+            etl_last_run_index INT,
+            ett_last_run_date DATE
         )
         """
     execute_query(db_session, query)

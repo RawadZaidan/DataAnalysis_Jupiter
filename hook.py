@@ -1,7 +1,6 @@
 from database_handler import execute_query, create_connection, close_connection,return_data_as_df, return_insert_into_sql_statement_from_df
-from lookups import InputTypes, IncrementalField, SourceName, DESTINATION_SCHEMA, ErrorHandling
+from lookups import InputTypes, IncrementalField,  DESTINATION_SCHEMA, ErrorHandling
 from datetime import datetime
-from prehook import return_tables_by_schema
 from logging_handler import show_error_message
 
 #DONE, Tested: Create last ETL table in the new schema
@@ -41,7 +40,7 @@ def read_source_df_insert_into_dest(db_session, source_name, etl_date = None):
         source_name = source_name.value
         #This will get you a list of tables inside this schema that are mentioned in SQLTablesToReplicate
         tables = return_tables_by_schema(source_name)
-        #This will return each table and it's ETL last update column name as dict key/value
+        #This will return each table and its ETL last update column name as dict key/value
         incremental_date_dict = return_lookup_items_as_dict(IncrementalField)
         for table in tables:
             staging_query = f"""
@@ -59,7 +58,7 @@ def read_source_df_insert_into_dest(db_session, source_name, etl_date = None):
     
 def return_etl_last_updated_date(db_session):
     try:
-        query = "SELECT etl_last_run_date FROM dw_reporting.etl_checkpoint ORDER BY etl_last_run_date DESC LIMIT 1"
+        query = f"SELECT etl_last_run_date FROM {DESTINATION_SCHEMA.DESTINATION_NAME.value}.etl_checkpoint ORDER BY etl_last_run_date DESC LIMIT 1"
         etl_df = return_data_as_df(
             file_executor= query,
             input_type= InputTypes.SQL,
@@ -80,10 +79,10 @@ def execute_hook():
     db_session = create_connection()
     create_etl_checkpoint(db_session)
     etl_date = return_etl_last_updated_date(db_session)
-    read_source_df_insert_into_dest(db_session,SourceName.DVD_RENTAL, etl_date)
+    read_source_df_insert_into_dest(db_session,DESTINATION_SCHEMA.DESTINATION_NAME.value, etl_date)
     # start applying transformation 
     # build dimensions.
     # build facts.
     # build aggregates.
     
-    close_connection()
+    close_connection(db_session)

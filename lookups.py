@@ -95,3 +95,5 @@ class STANDINGS_SEASONS(Enum):
     Season_2020 = 'https://www.premierleague.com/tables?co=1&se=363&ha=-1'
     Season_2019 = 'https://www.premierleague.com/tables?co=1&se=274&ha=-1'
     Season_2018 = 'https://www.premierleague.com/tables?co=1&se=210&ha=-1'
+
+
