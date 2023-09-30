@@ -10,6 +10,8 @@ from selenium.webdriver.common.by import By
 from time import sleep
 from datetime import datetime
 import pandas as pd
+from prehook import return_match_df_from_web,first_time_csv,insert_standings_into_stg
+
 
 #DONE, TESTED
 def create_etl_checkpoint(db_session):
@@ -114,18 +116,28 @@ def insert_or_update_etl_checkpoint(db_session, etl_index,does_etl_index_exists)
         execute_query(db_session,insert_stmtnt)
 
 def execute_hook():
+
+    #Create a connection and start the fun
     db_session = create_connection()
+    #Checkpoint created if doesn't exist
     create_etl_checkpoint(db_session)
+    #Fetches last_id
     last_etl_id,does_etl_index_exists=return_etl_last_updated_index(db_session)
+    #returns the last_player_game_index
     etl_index,return_df = return_last_match_df_from_web(last_etl_id)
+    #retruns df with all the matches that aren't in the db
+    return_match_df_from_web(last_etl_id, etl_index)
     insert_statement=return_insert_into_sql_statement_from_df_stg(return_df,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value,DESTINATION_SCHEMA.DESTINATION_NAME.value)
     for insert in insert_statement:
         execute_query(db_session=db_session, query= insert)
     insert_or_update_etl_checkpoint(db_session,etl_index,does_etl_index_exists)
+
+    #CSVS full refresh
+    first_time_csv(db_session)
+
+    #Standings full refresh
+    insert_standings_into_stg(db_session)
+
     
-    # start applying transformation.
-    # build dimensions.
-    # build facts.
-    # build aggregates.
     
     close_connection(db_session)
