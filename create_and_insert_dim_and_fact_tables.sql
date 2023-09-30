@@ -101,7 +101,10 @@ VALUES
 
 -- fact_game_results -- ADD team names, date 
 CREATE TABLE IF NOT EXISTS premier_league.fact_game_results (
-    match_id INT PRIMARY KEY ,
+    match_id INT PRIMARY KEY,
+    match_date DATE,
+    home_team_name VARCHAR,
+    away_team_name VARCHAR,
     score VARCHAR,
     home_team_goals INT,
     away_team_goals INT,
@@ -123,12 +126,15 @@ CREATE TABLE IF NOT EXISTS premier_league.fact_game_results (
 CREATE INDEX IF NOT EXISTS idx_match_id ON premier_league.fact_game_results(match_id);
 
 INSERT INTO premier_league.fact_game_results
-   (match_id,score,home_team_goals, away_team_goals,home_possession,away_possession,
+   (match_id,match_date,home_team_name,away_team_name,score,home_team_goals, away_team_goals,home_possession,away_possession,
    home_shots,away_shots,home_shots_on_target,away_shots_on_target,home_fouls,away_fouls,
    home_yellow_cards,away_yellow_cards,
    home_red_cards,away_red_cards)
 SELECT
 	src_web_stats.match_id,
+   src_web_stats.date,
+   src_web_stats.home_team,
+   src_web_stats.away_team,
 	CONCAT(src_web_stats.home_score,'-',src_web_stats.away_score) as score,
 	src_web_stats.home_score,
 	src_web_stats.away_score,
@@ -147,7 +153,10 @@ SELECT
 FROM premier_league.stg_web_stats AS src_web_stats
 ON CONFLICT (match_id)
 DO UPDATE SET 
-    match_id=excluded.match_id,
+   match_id=excluded.match_id,
+   match_date=excluded.match_date,
+   home_team_name=excluded.home_team_name,
+   away_team_name=excluded.away_team_name
 	score=excluded.score,
 	home_team_goals=excluded.home_team_goals,
 	away_team_goals=excluded.away_team_goals,

@@ -71,6 +71,7 @@ def df_web_cleaning(web_df):
     return_df.columns=return_df.columns.str.replace("_%","")
     if return_df.columns[0]=='Unnamed: 0': 
         return_df.pop(return_df.columns[0])
+    return_club_name(return_df)
     return return_df
 
 def clean_games_function(df):
