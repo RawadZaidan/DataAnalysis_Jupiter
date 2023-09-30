@@ -89,11 +89,11 @@ class READURLS(Enum):
     Appearances = "https://drive.google.com/file/d/1nmK10IgDtTEIc1oC8zIt0w8aQDNleIKh/view?usp=drive_link"
 
 class STANDINGS_SEASONS(Enum):
-    Season_2023 = 'https://www.premierleague.com/tables'
-    Season_2022 = 'https://www.premierleague.com/tables?co=1&se=489&ha=-1'
-    Season_2021 = 'https://www.premierleague.com/tables?co=1&se=418&ha=-1'
-    Season_2020 = 'https://www.premierleague.com/tables?co=1&se=363&ha=-1'
-    Season_2019 = 'https://www.premierleague.com/tables?co=1&se=274&ha=-1'
-    Season_2018 = 'https://www.premierleague.com/tables?co=1&se=210&ha=-1'
+    Season_2022 = 'https://www.skysports.com/premier-league-table/2022'
+    Season_2021 = 'https://www.skysports.com/premier-league-table/2021'
+    Season_2020 = 'https://www.skysports.com/premier-league-table/2020'
+    Season_2019 = 'https://www.skysports.com/premier-league-table/2019'
+    Season_2018 = 'https://www.skysports.com/premier-league-table/2018'
+    Season_2023 = 'https://www.skysports.com/premier-league-table/2023'
 
 

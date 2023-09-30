@@ -169,3 +169,37 @@ def return_club_name(dataframe):
     return_df['away_team']=return_df['away_team'].map(name_mapping)
     return return_df
     
+def standings_return_club_name(dataframe):
+    return_df=dataframe
+    name_mapping = {
+        'Bournemouth':'AFC Bournemouth',
+        'Burnley':'Burnley FC',
+        'Arsenal':'Arsenal FC',
+        'Everton': 'Everton FC',
+        'West Ham United':'West Ham United',
+        'Leeds United': 'Leeds United',
+        'West Bromwich Albion':'West Bromwich Albion',
+        'Huddersfield Town':'Huddersfield Town',
+        'Fulham':'Fulham FC',
+        'Brentford':'Brentford FC',
+        'Brighton and Hove Albion':'Brighton & Hove Albion',
+        'Newcastle United':'Newcastle United',
+        'Manchester City':'Manchester City',
+        'Manchester United':'Manchester United',
+        'Tottenham Hotspur':'Tottenham Hotspur',
+        'Sheffield United':'Sheffield United',
+        'Wolverhampton Wanderers':'Wolverhampton Wanderers',
+        'Aston Villa':'Aston Villa',
+        'Leicester City':'Leicester City',
+        'Cardiff City':'Cardiff City',
+        'Norwich City':'Norwich City',
+        'Liverpool':'Liverpool FC',
+        'Crystal Palace':'Crystal Palace',
+        'Luton Town':'Luton Town',
+        'Watford':'Watford FC',
+        'Southampton':'Southampton FC',
+        'Nottingham Forest':'Nottingham Forest',
+        'Chelsea':'Chelsea FC'
+    }
+    return_df['Team']=return_df['Team'].map(name_mapping)
+    return return_df

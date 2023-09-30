@@ -146,41 +146,46 @@ def return_standings_df_from_web():
     standings['Club'] = standings['Club'].apply(remove_suffix)
     return standings
 
-def return_all_standings_df_from_web():
+def return_all_standings_df_from_web(url):
     driver = webdriver.Chrome()
     options=Options()
     options.add_argument('--headless')
     driver = webdriver.Chrome(options=options)
-    url='https://www.premierleague.com/tables'
+    # url='https://www.premierleague.com/tables'
     driver.get(url)
     sleep(10)
     table_df=pd.read_html(driver.page_source)
     table_df=table_df[0].iloc[::2]
     standings=table_df.copy()
-    standings['Position']=table_df['Position'].astype(str).str[:2]
+    standings['#']=table_df['#'].astype(str).str[:2]
     standings.drop(columns=['Unnamed: 10','Unnamed: 11','Unnamed: 12'],inplace=True)
     standings.reset_index()
     standings['Club'] = standings['Club'].apply(remove_suffix)
     return standings
 
-def return_all_seasons_standings_df_from_web():
-    driver = webdriver.Chrome()
-    options=Options()
-    options.add_argument('--headless')
-    driver = webdriver.Chrome(options=options)
+# def return_all_seasons_standings_df_from_web():
+#     concatenated_df = None
+#     for season in STANDINGS_SEASONS:
+#         url= season.value
+#         sleep(10)
+#         table_df=pd.read_html(driver.page_source)
+#         table_df=table_df[0].iloc[::2]
+#         standings=table_df.copy()
+#         standings['Position']=table_df['Position'].astype(str).str[:2]
+#         standings.drop(columns=['Unnamed: 10','Unnamed: 11','Unnamed: 12'],inplace=True)
+#         sleep(5)
+#         standings.reset_index()
+#         standings['Club'] = standings['Club'].apply(remove_suffix)
+#         standings['Season'] = season.name[-4:]
+#         concatenated_df = pd.concat([concatenated_df, standings], axis=0, ignore_index=True)
+#     return concatenated_df
+
+def all_standings():
     concatenated_df = None
     for season in STANDINGS_SEASONS:
-        url= season.value
-        driver.get(url)
-        sleep(10)
-        table_df=pd.read_html(driver.page_source)
-        table_df=table_df[0].iloc[::2]
-        standings=table_df.copy()
-        standings['Position']=table_df['Position'].astype(str).str[:2]
-        standings.drop(columns=['Unnamed: 10','Unnamed: 11','Unnamed: 12'],inplace=True)
-        sleep(5)
-        standings.reset_index()
-        standings['Club'] = standings['Club'].apply(remove_suffix)
-        standings['Season'] = season.name[-4:]
-        concatenated_df = pd.concat([concatenated_df, standings], axis=0, ignore_index=True)
+        df = pd.read_html(season.value)[-1]
+        df.rename(columns={'#': 'Position'}, inplace=True)
+        df = df.iloc[:,:10]
+        df['season'] = season.name[-4:]
+        concatenated_df = pd.concat([concatenated_df, df], axis=0, ignore_index=True)
     return concatenated_df

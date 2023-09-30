@@ -149,8 +149,9 @@ def read_csv_create_stg_into_pg_clean(db_session):
         execute_query(db_session=db_session, query=query)   
 
 def insert_standings_into_stg(db_session):
-    df = misc_handler.return_all_seasons_standings_df_from_web()
+    df = misc_handler.all_standings()
     df = remove_spaces_from_columns_df(df)
+    df = cleaning_dfs_handler.standings_return_club_name(df)
     query = return_create_statement_from_df_stg(df,table_name='standings')
     execute_query(db_session=db_session,query=query)
     print('Done creating stg table of:', 'standings')
