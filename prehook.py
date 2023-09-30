@@ -4,7 +4,7 @@ from lookups import ErrorHandling, PreHookSteps,  InputTypes,  DESTINATION_SCHEM
 from logging_handler import show_error_message
 from pandas_handler import get_csv_file_names_into_dict, return_paths_dict, remove_spaces_from_columns_df
 from misc_handler import read_seasons_into_sql, download_files,return_match_df_from_web, read_csv_files_from_drive
-from database_handler import create_connection
+from database_handler import create_connection, return_create_statement_from_df_fact, return_insert_into_sql_statement_from_df_fact
 import pandas as pd
 import misc_handler
 import cleaning_dfs_handler
@@ -160,6 +160,99 @@ def insert_standings_into_stg(db_session):
     for query_in in query:
         execute_query(db_session=db_session,query=query_in)
 
+def standings_points_rolling(db_session):
+
+    dict_teams_season = {}
+    for season in range(2018,2024):
+        query = """WITH wind AS (
+        SELECT
+            CASE
+            WHEN home_team_goals > away_team_goals THEN home_team_name
+            WHEN home_team_goals < away_team_goals THEN away_team_name
+            ELSE 'Draw'
+            END AS winner,
+            *
+        FROM premier_league.fact_game_results
+        ORDER BY match_id
+        ),
+        new_wind AS (
+        SELECT
+            CASE
+            WHEN SUBSTRING(CAST(match_id AS TEXT), 0, 3) = '38' THEN 2018
+            WHEN SUBSTRING(CAST(match_id AS TEXT), 0, 3) = '46' THEN 2019
+            WHEN SUBSTRING(CAST(match_id AS TEXT), 1, 2) IN ('58', '59') THEN 2020
+            WHEN SUBSTRING(CAST(match_id AS TEXT), 0, 3) = '66' THEN 2021
+            WHEN SUBSTRING(CAST(match_id AS TEXT), 0, 3) IN ('74', '75') THEN 2022
+            WHEN SUBSTRING(CAST(match_id AS TEXT), 0, 3) = '93' THEN 2023
+            END AS season,
+            *
+        FROM wind)
+
+        SELECT * FROM new_wind
+        """
+        concatenated_df = None
+        df = return_data_as_df(file_executor=query, input_type=InputTypes.SQL, db_session=db_session)
+        df = df[df['season'] == season] #changes in loop
+        list_of_teams = df['home_team_name'].unique().tolist()
+        dict_teams_season[season] = list_of_teams
+        for team in list_of_teams:
+            query = f"""WITH wind AS (
+                    SELECT
+                        CASE
+                        WHEN home_team_goals > away_team_goals THEN home_team_name
+                        WHEN home_team_goals < away_team_goals THEN away_team_name
+                        ELSE 'Draw'
+                        END AS winner,
+                        *
+                    FROM premier_league.fact_game_results
+                    ORDER BY match_id
+                    ),
+                    new_wind AS (
+                    SELECT
+                        CASE
+                        WHEN SUBSTRING(CAST(match_id AS TEXT), 0, 3) = '38' THEN 2018
+                        WHEN SUBSTRING(CAST(match_id AS TEXT), 0, 3) = '46' THEN 2019
+                        WHEN SUBSTRING(CAST(match_id AS TEXT), 1, 2) IN ('58', '59') THEN 2020
+                        WHEN SUBSTRING(CAST(match_id AS TEXT), 0, 3) = '66' THEN 2021
+                        WHEN SUBSTRING(CAST(match_id AS TEXT), 0, 3) IN ('74', '75') THEN 2022
+                        WHEN SUBSTRING(CAST(match_id AS TEXT), 0, 3) = '93' THEN 2023
+                        END AS season,
+                        *
+                    FROM wind
+                    WHERE home_team_name = '{team}' OR away_team_name = '{team}'
+                    ),
+                    points_selected AS (
+                    SELECT
+                        CASE
+                        WHEN winner = '{team}' THEN 3
+                        WHEN winner = 'Draw' THEN 1
+                        ELSE 0
+                        END AS points_selected_team,
+                        *
+                    FROM new_wind
+                    )
+
+                    SELECT '{team}' AS Selected_team,
+                    SUM(points_selected_team) OVER (PARTITION BY season ORDER BY match_id) AS running_points_total,
+                    *
+                    FROM points_selected;"""
+            
+            df = return_data_as_df(file_executor=query, input_type=InputTypes.SQL, db_session=db_session)
+            concatenated_df = pd.concat([concatenated_df,df], axis=0, ignore_index=True)
+        return concatenated_df
+
+def insert_points_standings_into_fact(db_session):
+    df = standings_points_rolling(db_session)
+    df = remove_spaces_from_columns_df(df)
+    # df = cleaning_dfs_handler.rolling_standings_return_club_name(df)
+    query = return_create_statement_from_df_fact(df,table_name='rolling_points_standing')
+    execute_query(db_session=db_session,query=query)
+    print('Done creating stg table of:', 'rolling_points_standing')
+    query = return_insert_into_sql_statement_from_df_fact(df,table_name='rolling_points_standing')
+    print('Inserting into:', 'rolling_points_standing')
+    for query_in in query:
+        execute_query(db_session=db_session,query=query_in)
+
 def execute_prehook(sql_command_directory_path='./SQL_Commands'):
     try:
         #Create connection to PG
@@ -178,7 +271,7 @@ def execute_prehook(sql_command_directory_path='./SQL_Commands'):
         read_seasons_into_sql(db_session)
 
         #RAWAD : Execute first time standings function and into pg
-        insert_standings_into_stg(db_session)
+        insert_points_standings_into_fact(db_session)
 
         #Close the connection
         close_connection(db_session)
