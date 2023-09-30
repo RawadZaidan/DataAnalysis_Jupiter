@@ -233,7 +233,7 @@ def standings_points_rolling(db_session):
                     )
 
                     SELECT '{team}' AS Selected_team,
-                    SUM(points_selected_team) OVER (PARTITION BY season ORDER BY match_id) AS running_points_total,
+                    SUM(points_selected_team) OVER (PARTITION BY season ORDER BY match_date) AS running_points_total,
                     *
                     FROM points_selected;"""
             
