@@ -130,3 +130,41 @@ def clean_appearances_function(df):
         error_string_prefix = ErrorHandling.APPEARANCES_ERROR.value
         error_string_suffix = str(e)
         show_error_message(error_string_prefix, error_string_suffix)
+
+
+def return_club_name(dataframe):
+    return_df=dataframe
+    name_mapping = {
+        'Bournemouth':'AFC Bournemouth',
+        'Burnley':'Burnley FC',
+        'Arsenal':'Arsenal FC',
+        'Everton': 'Everton FC',
+        'West Ham':'West Ham United',
+        'Leeds': 'Leeds United',
+        'West Brom':'West Bromwich Albion',
+        'Huddersfield':'Huddersfield Town',
+        'Fulham':'Fulham FC',
+        'Brentford':'Brentford FC',
+        'Brighton':'Brighton & Hove Albion',
+        'Newcastle':'Newcastle United',
+        'Man City':'Manchester City',
+        'Man Utd':'Manchester United',
+        'Spurs':'Tottenham Hotspur',
+        'Sheffield Utd':'Sheffield United',
+        'Wolves':'Wolverhampton Wanderers',
+        'Aston Villa':'Aston Villa',
+        'Leicester':'Leicester City',
+        'Cardiff':'Cardiff City',
+        'Norwich':'Norwich City',
+        'Liverpool':'Liverpool FC',
+        'Crystal Palace':'Crystal Palace',
+        'Luton':'Luton Town',
+        'Watford':'Watford FC',
+        'Southampton':'Southampton FC',
+        '''Nott'm Forest''':'Nottingham Forest',
+        'Chelsea':'Chelsea FC'
+    }
+    return_df['home_team']=return_df['home_team'].map(name_mapping)
+    return_df['away_team']=return_df['away_team'].map(name_mapping)
+    return return_df
+    
