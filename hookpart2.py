@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from time import sleep
 from datetime import datetime
 import pandas as pd
-from prehook import return_match_df_from_web,first_time_csv,insert_standings_into_stg
+from prehook import return_match_df_from_web,first_time_csv,insert_standings_into_stg,execute_sql_folder
 
 
 #DONE, TESTED
@@ -119,12 +119,16 @@ def execute_hook():
 
     #Create a connection and start the fun
     db_session = create_connection()
+
     #Checkpoint created if doesn't exist
     create_etl_checkpoint(db_session)
+
     #Fetches last_id
     last_etl_id,does_etl_index_exists=return_etl_last_updated_index(db_session)
+
     #returns the last_player_game_index
     etl_index,return_df = return_last_match_df_from_web(last_etl_id)
+    
     #retruns df with all the matches that aren't in the db
     return_match_df_from_web(last_etl_id, etl_index)
     insert_statement=return_insert_into_sql_statement_from_df_stg(return_df,WEBSCRAPINGSTAGINGTABLE.STGTABLENAME.value,DESTINATION_SCHEMA.DESTINATION_NAME.value)
@@ -138,6 +142,8 @@ def execute_hook():
     #Standings full refresh
     insert_standings_into_stg(db_session)
 
-    
-    
+    # Execute sql hook folder
+    execute_sql_folder(db_session, sql_command_directory_path='./Hook_SQL_Commands')
+
+    #Closes connection
     close_connection(db_session)
