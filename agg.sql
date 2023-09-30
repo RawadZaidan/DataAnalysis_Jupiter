@@ -8,7 +8,6 @@
 -- GROUP BY player.player_id
 -- ORDER BY COUNT(player.player_id) DESC
 
-
 --AGG OCCURANCES BY MINUTE
 -- SELECT type,
 -- 		minute,
