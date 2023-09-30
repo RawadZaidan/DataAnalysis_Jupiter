@@ -156,7 +156,7 @@ DO UPDATE SET
    match_id=excluded.match_id,
    match_date=excluded.match_date,
    home_team_name=excluded.home_team_name,
-   away_team_name=excluded.away_team_name
+   away_team_name=excluded.away_team_name,
 	score=excluded.score,
 	home_team_goals=excluded.home_team_goals,
 	away_team_goals=excluded.away_team_goals,
