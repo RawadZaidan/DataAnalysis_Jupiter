@@ -11,10 +11,9 @@ from time import sleep
 from datetime import datetime
 import pandas as pd
 
-
+#DONE, TESTED
 def create_etl_checkpoint(db_session):
     schema_destination_table = DESTINATION_SCHEMA.DESTINATION_NAME.value
-    execute_query(db_session, query)
     query = f"""
         CREATE TABLE IF NOT EXISTS {schema_destination_table}.etl_checkpoint
         (
@@ -86,7 +85,7 @@ def return_last_match_df_from_web(last_etl_id):
 def return_etl_last_updated_index(db_session):
     does_etl_index_exists = False
     try:
-        query = f"""SELECT etl_last_run_index FROM {DESTINATION_SCHEMA.DESTINATION_NAME.value}.etl_checkpoint ORDER BY etl_last_run_date DESC LIMIT 1"""
+        query = f"""SELECT match_id FROM {DESTINATION_SCHEMA.DESTINATION_NAME.value}.fact_game_results ORDER BY fact_game_results.match_id DESC LIMIT 1"""
         etl_df = return_data_as_df(
             file_executor= query,
             input_type= InputTypes.SQL,
@@ -129,4 +128,4 @@ def execute_hook():
     # build facts.
     # build aggregates.
     
-    close_connection()
+    close_connection(db_session)
