@@ -44,3 +44,32 @@ ON
   match.game_id = events.game_id
 WHERE 
   events.type = 'Goals'
+
+--player goals VIEW
+
+create view total_goals_player as
+SELECT
+  player.player_id AS player_id,
+  player.player_name AS player_name,
+  match.season AS season,
+  COUNT(*) AS total_goals
+FROM 
+  premier_league.stg_games_events AS events
+INNER JOIN 
+  premier_league.dim_player AS player
+ON 
+  player.player_id = events.player_id
+INNER JOIN 
+  premier_league.stg_games AS match
+ON 
+  match.game_id = events.game_id
+WHERE 
+  events.type = 'Goals'
+GROUP BY
+  player.player_id,
+  player.player_name,
+  match.season
+ORDER BY
+  season,
+  total_goals DESC;
+
