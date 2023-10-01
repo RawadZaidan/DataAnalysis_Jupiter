@@ -27,3 +27,20 @@ SELECT * FROM clean_set
 -- INNER JOIN clean_set 
 -- ON clean_set.home_team_name = web.home_team
 -- AND clean_set.away_team_name = web.away_team
+
+
+---
+
+SELECT *
+FROM 
+  premier_league.stg_games_events events
+INNER JOIN 
+  premier_league.dim_player AS player
+ON 
+  player.player_id = events.player_id
+INNER JOIN 
+  premier_league.stg_games AS match
+ON 
+  match.game_id = events.game_id
+WHERE 
+  events.type = 'Goals'
