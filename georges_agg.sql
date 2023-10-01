@@ -59,3 +59,40 @@ FROM HOME_TEAM_GOALS
 INNER JOIN AWAY_TEAM_GOALS
 ON HOME_TEAM_GOALS.home_team=AWAY_TEAM_GOALS.away_team
 ORDER BY HOME_TEAM_GOALS.goals_conceided+AWAY_TEAM_GOALS.goals_conceided DESC
+
+
+
+--- View for team analysis 
+
+CREATE OR REPLACE VIEW premier_league.team_stats_per_date AS
+SELECT
+	premier_league.fact_game_results.away_team_name AS team_name,
+	premier_league.fact_game_results.home_team_name AS opponent_name,
+	premier_league.fact_game_results.away_team_goals AS goals,
+	premier_league.fact_game_results.home_team_goals AS goals_conceided,
+	premier_league.fact_game_results.away_possession AS possession,
+	premier_league.fact_game_results.away_shots_on_target AS shots_target,
+	premier_league.fact_game_results.away_yellow_cards AS yellow_cards,
+	premier_league.fact_game_results.away_red_cards AS red_cards,
+	premier_league.fact_game_results.match_date,
+	premier_league.fact_game_results.match_id,
+	premier_league.fact_rolling_points_standing.season
+FROM premier_league.fact_game_results
+INNER JOIN premier_league.fact_rolling_points_standing
+ON premier_league.fact_game_results.match_id=premier_league.fact_rolling_points_standing.match_id
+UNION
+SELECT
+	premier_league.fact_game_results.home_team_name,
+	premier_league.fact_game_results.away_team_name AS opponent_name,
+	premier_league.fact_game_results.home_team_goals AS goals,
+	premier_league.fact_game_results.away_team_goals AS goals_conceided,
+	premier_league.fact_game_results.home_possession,
+	premier_league.fact_game_results.home_shots_on_target,
+	premier_league.fact_game_results.home_yellow_cards,
+	premier_league.fact_game_results.home_red_cards,
+	premier_league.fact_game_results.match_date,
+	premier_league.fact_game_results.match_id,
+	premier_league.fact_rolling_points_standing.season
+FROM premier_league.fact_game_results
+INNER JOIN premier_league.fact_rolling_points_standing
+ON premier_league.fact_game_results.match_id=premier_league.fact_rolling_points_standing.match_id
