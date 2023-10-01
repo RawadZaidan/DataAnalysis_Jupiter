@@ -12,7 +12,6 @@
 -- SELECT type,
 -- 		minute,
 -- 		count(club_id) AS occurances
-
 -- FROM premier_league.stg_games_events
 -- GROUP BY type,minute
 -- ORDER Bycount(club_id) DESC
@@ -81,3 +80,22 @@ SELECT CASE WHEN
 			END AS season,*
 FROM wind 
 
+CREATE VIEW player_valuations_timeline AS
+SELECT 
+    player.player_id, 
+    player.player_name,
+    club.club_name,
+    (EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM CAST(stg.date_of_birth AS DATE))) AS age,
+    val.last_season,
+    CAST(val.date AS DATE),
+    val.market_value_in_eur,
+    player.nationality,
+    player.position
+FROM premier_league.stg_player_valuations val
+INNER JOIN premier_league.dim_player player
+ON val.player_id = player.player_id
+INNER JOIN premier_league.dim_club club
+ON club.club_id = player.club_id
+INNER JOIN premier_league.stg_players stg
+ON stg.player_id = player.player_id
+ORDER BY val.market_value_in_eur DESC;
