@@ -1,5 +1,5 @@
 from hookpart2 import execute_hook,create_etl_checkpoint, return_etl_last_updated_index
-from database_handler import create_connection, execute_query
+from database_handler import create_connection, execute_query, close_connection
 from prehook import return_data_as_df
 from lookups import InputTypes, DESTINATION_SCHEMA
 
@@ -21,3 +21,5 @@ def execute_posthook(db_session):
     db_session = create_connection()
 
     post_hook_cleanup(db_session)
+
+    close_connection(db_session)

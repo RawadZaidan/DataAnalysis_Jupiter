@@ -218,3 +218,50 @@ DO UPDATE SET
     minutes_played = excluded.minutes_played,
     yellow_cards = excluded.yellow_cards, 
     red_cards = excluded.red_cards; 
+
+CREATE VIEW player_valuations_timeline AS
+SELECT 
+    player.player_id, 
+    player.player_name,
+    club.club_name,
+    (EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM CAST(stg.date_of_birth AS DATE))) AS age,
+    val.last_season,
+    CAST(val.date AS DATE),
+    val.market_value_in_eur,
+    player.nationality,
+    player.position
+FROM premier_league.stg_player_valuations val
+INNER JOIN premier_league.dim_player player
+ON val.player_id = player.player_id
+INNER JOIN premier_league.dim_club club
+ON club.club_id = player.club_id
+INNER JOIN premier_league.stg_players stg
+ON stg.player_id = player.player_id
+ORDER BY val.market_value_in_eur DESC;
+
+
+create view total_goals_player as
+SELECT
+  player.player_id AS player_id,
+  player.player_name AS player_name,
+  match.season AS season,
+  COUNT(*) AS total_goals
+FROM 
+  premier_league.stg_games_events AS events
+INNER JOIN 
+  premier_league.dim_player AS player
+ON 
+  player.player_id = events.player_id
+INNER JOIN 
+  premier_league.stg_games AS match
+ON 
+  match.game_id = events.game_id
+WHERE 
+  events.type = 'Goals'
+GROUP BY
+  player.player_id,
+  player.player_name,
+  match.season
+ORDER BY
+  season,
+  total_goals DESC;
